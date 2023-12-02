@@ -26,7 +26,6 @@ export class MainSceneController extends BaseSceneController{
 
     /**
      * The main customization you might do here would be to set the background color or set a background image.
-     * Check out Lab Cat's helpful C1Example2 scene for example code that sets the background to an image.
      * @returns {Promise<void>}
      */
     async initScene(): Promise<void> {
@@ -36,8 +35,7 @@ export class MainSceneController extends BaseSceneController{
     /**
      * Specifies what view classes to use for different model class.
      * If you create custom models and views, you will need to link them here by calling `addModelViewSpec` with the
-     * model class as the first argument and the view class as the second. Check out C1Example2 and C1Example3 for examples
-     * with custom nodes added.
+     * model class as the first argument and the view class as the second.
      */
     initModelViewSpecs() {
         super.initModelViewSpecs();

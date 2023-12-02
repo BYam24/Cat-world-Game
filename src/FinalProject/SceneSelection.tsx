@@ -14,6 +14,7 @@ const enum Scenes{
     Example0="Example0",
     Example1="Example1",
     Example2="Example2",
+    Example3="Example3",
     ShaderDemo="ShaderDemo",
 }
 
@@ -21,6 +22,7 @@ const enum Scenes{
 // let SceneSelection:Scenes = Scenes.Example0;
 let SceneSelection:Scenes = Scenes.Example1;
 // let SceneSelection:Scenes = Scenes.Example2;
+// let SceneSelection:Scenes = Scenes.Example3;
 // let SceneSelection:Scenes = Scenes.ShaderDemo;
 
 
@@ -45,11 +47,17 @@ switch (SceneSelection) {
         SceneControllerClass = ExampleApps.Example1SceneController;
         break
     // @ts-ignore
-    // case Scenes.Example2:
-    //     SceneModel = new ExampleApps.Example2SceneModel();
-    //     SceneModel.name = "Example 2"
-    //     SceneControllerClass = ExampleApps.Example2SceneController;
-    //     break
+    case Scenes.Example2:
+        SceneModel = new ExampleApps.Example2SceneModel();
+        SceneModel.name = "Example 2"
+        SceneControllerClass = ExampleApps.Example2SceneController;
+        break
+    // @ts-ignore
+    case Scenes.Example3:
+        SceneModel = new ExampleApps.Example3SceneModel();
+        SceneModel.name = "Example 2"
+        SceneControllerClass = ExampleApps.Example3SceneController;
+        break
     // @ts-ignore
     case Scenes.ShaderDemo:
         SceneModel = new ExampleApps.ShaderDemoSceneModel();

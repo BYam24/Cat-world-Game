@@ -167,8 +167,14 @@ export abstract class ACameraClass<T extends TransformationInterface> extends AO
                 break;
 
             case ACamera.PROJECTION_TYPE.PERSPECTIVE:
-                let fov = Math.atan(this.frustumTop/this.zNear);
-                return new THREE.PerspectiveCamera(fov, this.aspect, this.zNear, this.zFar);
+                let fov = Math.atan(this.frustumTop/this.zNear)*180;
+                let perspective = new THREE.PerspectiveCamera();
+                this.getProjection().assignTo(perspective.projectionMatrix);
+                this.getProjectionInverse().assignTo(perspective.projectionMatrixInverse);
+                this.transform.getMat4().assignTo(perspective.matrix);
+                this.transform.getMat4().assignTo(perspective.matrixWorld);
+                perspective.matrixWorldInverse.copy( perspective.matrixWorld).invert();
+                return perspective;
                 break;
 
             default:
@@ -360,6 +366,14 @@ export class ACamera extends ACameraClass<NodeTransform3D>{
         }else{
             this.pose = NodeTransform3D.FromPoseMatrix(pose.getMat4());
         }
+    }
+
+    static CopyOf(camera:ACamera){
+        let newCamera = new this();
+        newCamera._projectionType = camera._projectionType;
+        newCamera.setProjection(camera.projection);
+        newCamera.setPose(camera.pose);
+        return newCamera;
     }
 
     setWithThreeJSCamera(camera: Camera): void {

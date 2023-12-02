@@ -18,6 +18,7 @@ export class ATriangleMeshView extends ANodeView{
     init(){
         this.meshGraphic = new ATriangleMeshGraphic(this.model.verts, this.model.material.threejs);
         this.registerAndAddGraphic(this.meshGraphic);
+        this.update();
     }
 
     update(): void {

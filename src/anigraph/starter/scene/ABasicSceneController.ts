@@ -7,7 +7,7 @@ import {AGLContext} from "../../rendering";
 import {ALoadedModel} from "../../scene/nodes/loaded/ALoadedModel";
 import {ALoadedView} from "../../scene/nodes/loaded/ALoadedView";
 import {RGBATestMeshModel, RGBATestMeshView} from "../nodes";
-import {ATriangleMeshModel, ATriangleMeshView, UnitQuadModel, UnitQuadView} from "../../scene";
+import {ANodeModel3D, ANodeView, ATriangleMeshModel, ATriangleMeshView, UnitQuadModel, UnitQuadView} from "../../scene";
 import {APointLightModel, APointLightView} from "../../scene/lights";
 import * as THREE from "three";
 import {AVisiblePointLightModel} from "../../scene/lights/AVisiblePointLightModel";
@@ -30,6 +30,10 @@ export abstract class ABasicSceneController extends ASceneController {
     }
     set currentRenderTarget(renderTarget:ARenderTarget|null){
         this.setCurrentRenderTarget((renderTarget==undefined)?null:renderTarget);
+    }
+
+    addRenderTarget(width:number, height:number){
+        this.renderTargets.push(ARenderTarget.CreateFloatRGBATarget(width, height));
     }
 
     setCurrentRenderTarget(renderTarget?:ARenderTarget|null){

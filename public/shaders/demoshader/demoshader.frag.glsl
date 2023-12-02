@@ -122,8 +122,4 @@ void main()	{
 
 //    gl_FragColor = vec4(diffuse, diffuse, diffuse, 1.0);
 //    gl_FragColor = vec4(specular, specular, specular, 1.0);
-//        gl_FragColor = vec4(specularLighting, 1.0);
-//            gl_FragColor = vec4(vNormal*0.6, 1.0);
-//        gl_FragColor = vec4(vColor);
-//    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 }

@@ -19,6 +19,9 @@ export class Example0SceneModel extends ExampleSceneModel {
     initAppState(appState: AppState): void {
         BillboardParticleSystemModel.AddParticleSystemControls();
 
+        /**
+         * Here we will specify functions that determine what is displayed in the react gui part of our webpage
+         */
         appState.setReactGUIContentFunction(UpdateGUIJSX);
         appState.setReactGUIBottomContentFunction(UpdateGUIWithBots);
     }

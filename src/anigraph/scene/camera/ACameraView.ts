@@ -3,7 +3,7 @@ import {ANodeView} from "../nodeView";
 import * as THREE from "three";
 import {ASerializable} from "../../base";
 import {ANodeModel} from "../nodeModel";
-import {Mat3, Mat4, TransformationInterface} from "../../math";
+import {ACamera, Mat3, Mat4, TransformationInterface} from "../../math";
 
 @ASerializable("ACameraView")
 export class ACameraView extends ANodeView{
@@ -70,6 +70,14 @@ export class ACameraView extends ANodeView{
         this.model.camera.getProjectionInverse().assignTo(this.threeJSCamera.projectionMatrixInverse);
         this.model.transform.getMat4().assignTo(this.threeJSCamera.matrix);
         this.model.transform.getMat4().assignTo(this.threeJSCamera.matrixWorld);
+        this.threeJSCamera.matrixWorldInverse.copy( this.threeJSCamera.matrixWorld).invert();
+    }
+
+    updateWithCamera(camera:ACamera){
+        camera.getProjection().assignTo(this.threeJSCamera.projectionMatrix);
+        camera.getProjectionInverse().assignTo(this.threeJSCamera.projectionMatrixInverse);
+        camera.transform.getMat4().assignTo(this.threeJSCamera.matrix);
+        camera.transform.getMat4().assignTo(this.threeJSCamera.matrixWorld);
         this.threeJSCamera.matrixWorldInverse.copy( this.threeJSCamera.matrixWorld).invert();
     }
 

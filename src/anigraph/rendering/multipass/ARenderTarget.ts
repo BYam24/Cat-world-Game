@@ -56,6 +56,8 @@ export class ARenderTarget extends AObject implements RenderTargetInterface{
             op = {...op, ...options};
         }
         this.target = new THREE.WebGLRenderTarget(width, height, {...op});
+        this.targetTexture.setMinFilter(op["minFilter"])
+        this.targetTexture.setMagFilter(op["magFilter"]);
     }
 
     GetTargetPixels(renderer: THREE.WebGLRenderer) {

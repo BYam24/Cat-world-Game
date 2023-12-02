@@ -11,7 +11,7 @@ import {
     TerrainView, TriangleMeshCharacterModel, TriangleMeshCharacterView
 } from "../Nodes";
 import {ExamplePlayerInteractionMode, ExamplePointerLockInteractionMode} from "../InteractionModes";
-import {AGLContext, GetAppState, Quaternion} from "../../../anigraph";
+import {AGLContext, ANodeModel, ANodeView, GetAppState, Quaternion} from "../../../anigraph";
 import {ExampleSceneModel} from "./ExampleSceneModel";
 
 export class ExampleSceneController extends BaseSceneController{
@@ -25,6 +25,10 @@ export class ExampleSceneController extends BaseSceneController{
      */
     get player(){
         return this.model.player;
+    }
+
+    createViewForNodeModel(nodeModel: ANodeModel): ANodeView {
+        return super.createViewForNodeModel(nodeModel);
     }
 
     /**

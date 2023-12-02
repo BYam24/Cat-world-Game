@@ -92,6 +92,8 @@ export abstract class ASceneController extends AController implements HasModelVi
     }
 
 
+
+
     async initScene(){
         // You can set the clear color for the rendering context
         this.renderer.setClearColor(this.clearColor.asThreeJS());
@@ -246,8 +248,13 @@ export abstract class ASceneController extends AController implements HasModelVi
         return this._cameraView;
     }
 
-    getThreeJSCamera(){
-        return this.cameraView.threeJSCamera;
+    getThreeJSCamera(cameraModel?:ACameraModel){
+        if(cameraModel === undefined) {
+            return this.cameraView.threeJSCamera;
+        }else{
+            let camview = this.getViewListForModel(cameraModel);
+            return (camview[0] as ACameraView).threeJSCamera;
+        }
     }
 
     getThreeJSScene(){

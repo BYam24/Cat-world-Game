@@ -263,8 +263,10 @@ export abstract class ExampleSceneModel extends BaseSceneModel {
         }
     }
 
-
-
+    /**
+     * Initialized a tank player and adds it to the scene
+     * @param texture
+     */
     initTankPlayer(texture?:ATexture){
         /**
          * First we will initialze the player and add it to the scene.

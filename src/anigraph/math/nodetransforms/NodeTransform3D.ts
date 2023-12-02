@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { ASerializable } from "../../base";
 import { NodeTransform } from "./NodeTransform";
-import {V3, Vec3, Mat4, V4, Quaternion, Vec4} from "../linalg";
+import {V3, Vec3, Mat4, V4, Quaternion, Vec4, Mat3} from "../linalg";
 import { Precision } from "../Precision";
 import { NodeTransform2D } from "./NodeTransform2D";
 import {Color} from "../Color";
@@ -235,6 +235,15 @@ export class NodeTransform3D implements NodeTransform<Vec3, Mat4> {
       return;
     }
     this.anchor = PRSinv.times(m).c3.Point3D.times(-1);
+  }
+
+  static FromPositionZY(position:Vec3, x:Vec3, y:Vec3){
+    let z = x.cross(y);
+    let yUse = z.cross(x);
+    let q = Quaternion.FromMatrix(
+        Mat3.FromColumns(x, yUse, z)
+    );
+    return new NodeTransform3D(position, q);
   }
 
   static LookAt(location: Vec3, target: Vec3, up: Vec3) {
