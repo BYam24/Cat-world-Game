@@ -17,9 +17,9 @@ const enum Scenes{
     ShaderDemo="ShaderDemo",
 }
 
-let SceneSelection:Scenes = Scenes.Main; // This example is an empty scene. Room to fill with your hopes and dreams...
+// let SceneSelection:Scenes = Scenes.Main; // This example is an empty scene. Room to fill with your hopes and dreams...
 // let SceneSelection:Scenes = Scenes.Example0;
-// let SceneSelection:Scenes = Scenes.Example1;
+let SceneSelection:Scenes = Scenes.Example1;
 // let SceneSelection:Scenes = Scenes.Example2;
 // let SceneSelection:Scenes = Scenes.ShaderDemo;
 

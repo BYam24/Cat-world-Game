@@ -156,7 +156,52 @@ export class TerrainModel extends ATerrainModel{
                  * For the starter code, we are just setting the map to 0
                  */
                 this.heightMap.setPixelNN(x, y, Math.random()*0.05);
-                // this.heightMap.setPixelNN(x, y, Math.sin(2*x)*0.2+Math.sin(2*y)*0.2);
+                // let theta_x = x/this.heightMap.width*2*Math.PI
+                // let theta_y= y/this.heightMap.height*2*Math.PI
+                // this.heightMap.setPixelNN(x, y, Math.sin(theta_x));
+            }
+        }
+        this.heightMap.setTextureNeedsUpdate();
+    }
+
+    get_uv_on_texture(world_pos:Vec2){
+        let u = (world_pos.x/(this.width)+0.5)*this.widthSegments
+        let v = (world_pos.y/(this.height)+0.5)*this.heightSegments
+        return new Vec2(u,v)
+    }
+    get_cos_height(r:number, depth:number){
+        let theta = r*Math.PI/2
+        return -Math.cos(theta)
+    }
+
+    is_in_circle(d_x:number,d_y:number,r_x:number,r_y:number){
+        return (d_x<r_x && d_x>-r_x) && (d_y<r_y && d_y>-r_y)
+    }
+    dig_hole(world_pos:Vec2, depth = 2, radius = 1){
+        let uv_pos = this.get_uv_on_texture(world_pos)
+        let r_x = radius/this.width*this.widthSegments
+        let r_y = radius/this.height*this.heightSegments
+        console.log(this.heightMap.width, this.heightMap.height)
+        for(let y=0;y<this.heightMap.height;y++){
+            for(let x=0;x<this.heightMap.width;x++) {
+                // let r_sq = ((x-uv_pos.x)/r_x)*((x-uv_pos.x)/r_x)+((y-uv_pos.y)/r_y)*((y-uv_pos.y)/r_y)
+                // let r = Math.sqrt(r_sq)
+                let d_x = (x-uv_pos.x)
+                let d_y = (y-uv_pos.y)
+                if (this.is_in_circle(d_x,d_y,r_x,r_y)){
+                    // let height = this.get_cos_height(r,depth);
+                    // console.log(x,y)
+                    if (x==100&&y == 100){
+                        console.log(x,y,d_x,d_y)
+                    }
+                    this.heightMap.setPixelNN(x, y, -0.5);
+                }
+                // console.log(uv_pos.x,uv_pos.y,r)
+                // if (r<1){
+                //     let height = this.get_cos_height(r,depth);
+                //     // this.heightMap.setPixelNN(x, y, height);
+                // }
+
             }
         }
         this.heightMap.setTextureNeedsUpdate();
