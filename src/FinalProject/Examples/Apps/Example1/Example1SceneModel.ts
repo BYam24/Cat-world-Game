@@ -107,7 +107,7 @@ export class Example1SceneModel extends ExampleSceneModel {
     timeUpdate(t: number, ...args:any[]) {
 
         this.timeUpdateDescendants(t);
-        this.player.position=V3(2,1,0);
+        this.player.position=V3(-0.5,0.7,0);
         // this.terrain.reRollRandomHeightMap()
         this.terrain.dig_hole(this.player.position.xy)
         // this.adjustParticleHeight(this.player);

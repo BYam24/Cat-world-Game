@@ -169,15 +169,16 @@ export class TerrainModel extends ATerrainModel{
         let v = (world_pos.y/(this.height)+0.5)*this.heightSegments
         return new Vec2(u,v)
     }
-    get_cos_height(r:number, depth:number){
+    get_cos_height(r:number,depth:number){
         let theta = r*Math.PI/2
-        return -Math.cos(theta)
+        return -Math.cos(theta)*depth
     }
 
-    is_in_circle(d_x:number,d_y:number,r_x:number,r_y:number){
-        return (d_x<r_x && d_x>-r_x) && (d_y<r_y && d_y>-r_y)
+
+    in_hole_range(r:number){
+        return r<1 && r>-1
     }
-    dig_hole(world_pos:Vec2, depth = 2, radius = 1){
+    dig_hole(world_pos:Vec2, depth = 0.3, radius = 0.5){
         let uv_pos = this.get_uv_on_texture(world_pos)
         let r_x = radius/this.width*this.widthSegments
         let r_y = radius/this.height*this.heightSegments
@@ -188,13 +189,11 @@ export class TerrainModel extends ATerrainModel{
                 // let r = Math.sqrt(r_sq)
                 let d_x = (x-uv_pos.x)
                 let d_y = (y-uv_pos.y)
-                if (this.is_in_circle(d_x,d_y,r_x,r_y)){
-                    // let height = this.get_cos_height(r,depth);
+                let r = (d_x/r_x)*(d_x/r_x) + (d_y/r_y)*(d_y/r_y)
+                if (this.in_hole_range(r)){
+                    let height = this.get_cos_height(r,depth);
                     // console.log(x,y)
-                    if (x==100&&y == 100){
-                        console.log(x,y,d_x,d_y)
-                    }
-                    this.heightMap.setPixelNN(x, y, -0.5);
+                    this.heightMap.setPixelNN(x, y, height);
                 }
                 // console.log(uv_pos.x,uv_pos.y,r)
                 // if (r<1){
