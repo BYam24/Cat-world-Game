@@ -107,9 +107,9 @@ export class Example1SceneModel extends ExampleSceneModel {
     timeUpdate(t: number, ...args:any[]) {
 
         this.timeUpdateDescendants(t);
-        this.player.position=V3(-0.5,0.7,0);
-        // this.terrain.reRollRandomHeightMap()
-        this.terrain.dig_hole(this.player.position.xy)
+        this.player.position=V3(-0.5,0.7,0);// move the cat to a specific place
+        this.terrain.reRollHeightMap() // set the terrain to flat
+        this.terrain.dig_hole(this.player.position.xy,0.3,0.5) // dig a hole right beneath the cat
         // this.adjustParticleHeight(this.player);
 
         for(let ei=0;ei<this.bots.length;ei++){
