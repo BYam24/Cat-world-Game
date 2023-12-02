@@ -54,7 +54,26 @@ export class TerrainModel extends ATerrainModel{
          *  you can access height map pixels using something like this:
          *  this.heightMap.pixelData.getPixelNN(5, 5);
          */
-        return 0;
+        let uv_pos = this.get_uv_on_texture(p)
+        return this.get_uv_height(uv_pos)
+    }
+
+    get_uv_height(uv_pos:Vec2){
+        let u = Math.floor(uv_pos.x)
+        let v = Math.floor(uv_pos.y)
+        let alpha = uv_pos.x-u
+        let beta = uv_pos.y-v
+        let p00 = this.heightMap.pixelData.getPixelNN(u, v)
+        let p10 = this.heightMap.pixelData.getPixelNN(u+1, v)
+        let p11 = this.heightMap.pixelData.getPixelNN(u+1, v+1)
+        let p01 = this.heightMap.pixelData.getPixelNN(u, v+1)
+        return this.biliear_interpolation(alpha,beta,p00,p10,p11,p01)
+    }
+
+    biliear_interpolation(alpha:number, beta:number,p00:number,p10:number,p11:number,p01:number){
+        let t0 = (1-alpha)*p00 + alpha*p10
+        let t1 = (1-alpha)*p01 + alpha*p11
+        return (1-beta)*t0 + beta*t1
     }
 
     static Create(
@@ -193,7 +212,10 @@ export class TerrainModel extends ATerrainModel{
                 if (this.in_hole_range(r)){
                     let height = this.get_cos_height(r,depth);
                     // console.log(x,y)
-                    this.heightMap.setPixelNN(x, y, height);
+                    if (height<this.heightMap.pixelData.getPixelNN(x,y)){
+                        this.heightMap.setPixelNN(x, y, height);
+                    }
+
                 }
                 // console.log(uv_pos.x,uv_pos.y,r)
                 // if (r<1){
