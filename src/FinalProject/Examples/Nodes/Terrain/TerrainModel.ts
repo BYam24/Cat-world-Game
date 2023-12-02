@@ -198,14 +198,13 @@ export class TerrainModel extends ATerrainModel{
         return r<1 && r>-1
     }
     dig_hole(world_pos:Vec2, depth = 0.3, radius = 0.5){
+        // dig a hole at the world_pos in world coordinate
         let uv_pos = this.get_uv_on_texture(world_pos)
         let r_x = radius/this.width*this.widthSegments
         let r_y = radius/this.height*this.heightSegments
         console.log(this.heightMap.width, this.heightMap.height)
         for(let y=0;y<this.heightMap.height;y++){
             for(let x=0;x<this.heightMap.width;x++) {
-                // let r_sq = ((x-uv_pos.x)/r_x)*((x-uv_pos.x)/r_x)+((y-uv_pos.y)/r_y)*((y-uv_pos.y)/r_y)
-                // let r = Math.sqrt(r_sq)
                 let d_x = (x-uv_pos.x)
                 let d_y = (y-uv_pos.y)
                 let r = (d_x/r_x)*(d_x/r_x) + (d_y/r_y)*(d_y/r_y)
@@ -217,11 +216,6 @@ export class TerrainModel extends ATerrainModel{
                     }
 
                 }
-                // console.log(uv_pos.x,uv_pos.y,r)
-                // if (r<1){
-                //     let height = this.get_cos_height(r,depth);
-                //     // this.heightMap.setPixelNN(x, y, height);
-                // }
 
             }
         }
