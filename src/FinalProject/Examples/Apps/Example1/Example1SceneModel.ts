@@ -110,6 +110,7 @@ export class Example1SceneModel extends ExampleSceneModel {
         this.player.position=V3(-0.5,0.7,0);// move the cat to a specific place
         this.terrain.reRollHeightMap() // set the terrain to flat
         this.terrain.dig_hole(this.player.position.xy,0.3,0.5) // dig a hole right beneath the cat
+        // this.terrain.dig_diamond_hole(this.player.position.xy,0.5,0.4) // dig a square hole right beneath the cat
         this.player.position.z = this.terrain.getTerrainHeightAtPoint(this.player.position.xy) // adjust player's height based on the height map
 
         for(let ei=0;ei<this.bots.length;ei++){
