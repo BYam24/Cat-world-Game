@@ -229,6 +229,7 @@ export class VertexArray3D extends VertexArray<Vec3> {
     return v;
   }
 
+
   static SquareXYUV(scale: number = 1, wraps: number = 1) {
     let verts = new VertexArray3D();
     // verts.position = new VertexAttributeArray3D();

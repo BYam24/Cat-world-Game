@@ -5,10 +5,12 @@
 
 import {
     AInteractionEvent,
-    AppState,
+    AppState, ATriangleMeshModel,
     GetAppState, NodeTransform3D,
+    V2,
     V3,
-    Vec2
+    V4,
+    Vec2, VertexArray3D
 } from "../../../../anigraph";
 import {ExampleSceneModel} from "../ExampleSceneModel";
 import {BillboardParticleSystemModel, ExampleParticleSystemModel} from "../../Nodes";
@@ -16,6 +18,7 @@ import {UpdateGUIJSX, UpdateGUIWithBots} from "../../GUIHelpers";
 
 export class Example0SceneModel extends ExampleSceneModel {
     playerParticleSystemModel!:ExampleParticleSystemModel;
+
     initAppState(appState: AppState): void {
         BillboardParticleSystemModel.AddParticleSystemControls();
 
@@ -30,6 +33,12 @@ export class Example0SceneModel extends ExampleSceneModel {
         await super.PreloadAssets();
         await this.LoadExampleModelClassShaders()
         await this.LoadExampleTextures();
+
+        /**
+         * For the cursor
+         */
+        await this.LoadSimpleTextureShader();
+        await this.LoadCursorTexture();
     }
 
     initCamera(...args:any[]) {
@@ -42,6 +51,8 @@ export class Example0SceneModel extends ExampleSceneModel {
     }
 
     initScene() {
+        let appState = GetAppState();
+
         /**
          * We need to add a light before we can see anything.
          * The easiest thing is to just attach a point light to the camera.
@@ -58,11 +69,19 @@ export class Example0SceneModel extends ExampleSceneModel {
          */
         this.initCharacters();
 
+
+        /**
+         * Let's add the cursor model but keep it invisible until an appropriate mode is activated
+         * @type {boolean}
+         */
+        this.initCursorModel();
+        this.cursorModel.visible = false;
+
+
         /**
          * Add an example bilboard particle system starter
          */
         // this.addExampleBilboardParticleSystem()
-
         // this.addExampleThreeJSNodeModel();
     }
 
@@ -102,6 +121,11 @@ export class Example0SceneModel extends ExampleSceneModel {
          */
         GetAppState().updateComponents();
 
+    }
+
+
+    onClick(event:AInteractionEvent){
+        console.log(event);
     }
 
     getCoordinatesForCursorEvent(event: AInteractionEvent){

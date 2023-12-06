@@ -24,6 +24,11 @@ import type {HasInteractionModeCallbacks} from "../../interaction";
 @ASerializable("ASceneInteractionMode")
 export class ASceneInteractionMode extends AInteractionMode implements HasInteractionModeCallbacks {
 
+    static InteractionModeClassName(){
+        // @ts-ignore
+        return this.constructor._serializationLabel
+    }
+
     // onKeyDown!:CallbackType;
     onKeyDown(event:AInteractionEvent, interaction:AKeyboardInteraction){}
     onKeyUp(event:AInteractionEvent, interaction:AKeyboardInteraction){}
@@ -32,6 +37,7 @@ export class ASceneInteractionMode extends AInteractionMode implements HasIntera
     onDragStart(event:AInteractionEvent, interaction:ADragInteraction){}
     onDragMove(event:AInteractionEvent, interaction:ADragInteraction){}
     onDragEnd(event:AInteractionEvent, interaction:ADragInteraction){}
+    onClick(event:AInteractionEvent, interaction:AClickInteraction){}
 
     get owner():ASceneController{
         return this._owner as ASceneController;
@@ -104,6 +110,13 @@ export class ASceneInteractionMode extends AInteractionMode implements HasIntera
                 this.onDragMove,
                 this.onDragEnd
             ));
+        }
+
+        if(this.onClick!==undefined){
+            this.addInteraction(AClickInteraction.Create(
+                this.domElement,
+                this.onClick
+            ))
         }
     }
 

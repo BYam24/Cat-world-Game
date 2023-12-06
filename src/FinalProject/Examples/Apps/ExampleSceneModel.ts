@@ -16,10 +16,10 @@ import {
     Color,
     GetAppState,
     NodeTransform3D,
-    Particle3D,
+    Particle3D, V2,
     V3,
     Vec2,
-    Vec3
+    Vec3, VertexArray3D
 } from "../../../anigraph";
 
 const N_CAT_TEXTURES = 6;
@@ -37,6 +37,13 @@ export abstract class ExampleSceneModel extends BaseSceneModel {
      * An array of bots...
      */
     bots:BotModel[]=[];
+
+    /**
+     * Cursor model
+     * @type {ATriangleMeshModel}
+     */
+    cursorModel!:ATriangleMeshModel;
+
 
     /**
      * Our custom player model. We will use getters and setters to access to make the player feel special...
@@ -93,6 +100,15 @@ export abstract class ExampleSceneModel extends BaseSceneModel {
         // this.materials.setMaterialModel("textured", await ABasicShaderModel.CreateModel("basic"));
     }
 
+    async LoadSimpleTextureShader(){
+        await GetAppState().loadShaderMaterialModel("simpletexture");
+    }
+
+    async LoadCursorTexture(cursorTexturePath?:string){
+        cursorTexturePath = cursorTexturePath??"./images/LabCatFloatingHeadSmall.png"
+        await this.loadTexture(cursorTexturePath, "cursor");
+    }
+
     //###############################################//--Load The Dragon!--\\###############################################
     //<editor-fold desc="Load The Dragon!">
     async LoadTheDragon(){
@@ -135,6 +151,63 @@ export abstract class ExampleSceneModel extends BaseSceneModel {
          */
         await this.loadTexture("./models/gltf/Cat_diffuse.jpg", ExampleSceneModel.CAT_MODEL_STRING_IDENTIFIER)
     }
+
+    initCursorModel(){
+        let appState = GetAppState();
+
+        this.cursorModel = new ATriangleMeshModel();
+
+        /**
+         * Create a vertex array with texture coordinates (and no normals)
+         * @type {VertexArray3D}
+         */
+        let verts = VertexArray3D.CreateForRendering(false, true)
+
+        /**
+         * Add 4 verts with the included attributes (position and texture coords)
+         */
+        verts.addVertex(
+            V3(-1,-1,0), // position
+            undefined, // no normal
+            V2(0,0) // texture coordinate
+        )
+
+        verts.addVertex(
+            V3(1,-1,0), // position
+            undefined, // no normal
+            V2(1,0) // texture coordinate
+        )
+
+        verts.addVertex(
+            V3(1,1,0), // position
+            undefined, // no normal
+            V2(1,1) // texture coordinate
+        )
+
+        verts.addVertex(
+            V3(-1,1,0), // position
+            undefined, // no normal
+            V2(0,1) // texture coordinate
+        )
+
+        /**
+         * Make two triangles out of the 4 verts
+         */
+        verts.addTriangleIndices(0,1,2);
+        verts.addTriangleIndices(2,3,0);
+
+        let cursorMaterial = appState.CreateShaderMaterial("simpletexture");
+        cursorMaterial.setTexture("diffuse", this.getTexture("cursor"));
+
+        this.cursorModel.setVerts(verts);
+        this.cursorModel.setMaterial(cursorMaterial);
+
+        /**
+         * Add the cursor quad as a child of the camera
+         */
+        this.cameraModel.addChild(this.cursorModel);
+    }
+
 
     /**
      * Create and return a cat model

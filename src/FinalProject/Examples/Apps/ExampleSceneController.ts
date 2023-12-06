@@ -119,7 +119,6 @@ export class ExampleSceneController extends BaseSceneController{
         );
     }
 
-
     initInteractions() {
         /**
          * We will define the debug interaction mode here.
