@@ -152,11 +152,7 @@ export abstract class ExampleSceneModel extends BaseSceneModel {
         await this.loadTexture("./models/gltf/Cat_diffuse.jpg", ExampleSceneModel.CAT_MODEL_STRING_IDENTIFIER)
     }
 
-    initCursorModel(){
-        let appState = GetAppState();
-
-        this.cursorModel = new ATriangleMeshModel();
-
+    createTexturedSquareVerts(){
         /**
          * Create a vertex array with texture coordinates (and no normals)
          * @type {VertexArray3D}
@@ -195,11 +191,29 @@ export abstract class ExampleSceneModel extends BaseSceneModel {
          */
         verts.addTriangleIndices(0,1,2);
         verts.addTriangleIndices(2,3,0);
+        return verts;
+    }
 
-        let cursorMaterial = appState.CreateShaderMaterial("simpletexture");
-        cursorMaterial.setTexture("diffuse", this.getTexture("cursor"));
 
+    initCursorModel(){
+        let appState = GetAppState();
+        this.cursorModel = new ATriangleMeshModel();
+        let verts = this.createTexturedSquareVerts();
         this.cursorModel.setVerts(verts);
+
+        /**
+         * Let's create the material for our cursor.
+         * Think of the material as an instance of a given shader that we can attach specific uniform values to and use
+         * for rendering specific geometry.
+         * @type {AShaderMaterial}
+         */
+        let cursorMaterial = appState.CreateShaderMaterial("simpletexture");
+
+        /**
+         * Setting the "diffuse" texture on our material will set the corresponding "diffuseMap" sampler2d in our shader,
+         * and the "diffuseMapProvided" boolean uniform will become true.
+         */
+        cursorMaterial.setTexture("diffuse", this.getTexture("cursor"));
         this.cursorModel.setMaterial(cursorMaterial);
 
         /**

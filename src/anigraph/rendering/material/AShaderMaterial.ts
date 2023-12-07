@@ -207,19 +207,20 @@ export class AShaderMaterial extends AMaterial{
 
     attachUniformToAppState(uniformName:string, stateName?:string, onChange?:(value:any)=>void){
         let appState = GetAppState();
-        let name = stateName??uniformName;
+        let name = uniformName;
+        stateName = stateName??uniformName;
         const self=this;
 
         onChange = onChange?onChange:(value:any) =>{
             self.setUniform(name, value);
         }
 
-        onChange(appState.getState(name));
-        self.subscribe(appState.addStateValueListener(name, (value:any)=>{
+        onChange(appState.getState(stateName));
+        self.subscribe(appState.addStateValueListener(stateName, (value:any)=>{
             if(onChange) {
                 onChange(value);
             }
-        }), `${name}_update`);
+        }), `${stateName}_update`);
     }
 
 

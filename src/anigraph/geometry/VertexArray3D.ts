@@ -400,7 +400,8 @@ export class VertexArray3D extends VertexArray<Vec3> {
     phiStart = 0,
     phiLength = Math.PI * 2,
     thetaStart = 0,
-    thetaLength = Math.PI
+    thetaLength = Math.PI,
+    ccw:boolean = true
   ) {
     let sphere = VertexArray3D.CreateForRendering(true, true);
     widthSegments = Math.max(3, Math.floor(widthSegments));
@@ -453,10 +454,21 @@ export class VertexArray3D extends VertexArray<Vec3> {
         const c = grid[iy + 1][ix];
         const d = grid[iy + 1][ix + 1];
         if (iy !== 0 || thetaStart > 0) {
-          sphere.indices.push([a, b, d]);
+
+          if(!ccw) {
+            sphere.indices.push([d, b, a]);
+          }else{
+            sphere.indices.push([a, b, d]);
+          }
         }
         if (iy !== heightSegments - 1 || thetaEnd < Math.PI) {
-          sphere.indices.push([b, c, d]);
+          if(!ccw){
+            sphere.indices.push([d, c, b]);
+          }else{
+            sphere.indices.push([b, c, d]);
+          }
+
+
         }
       }
     }

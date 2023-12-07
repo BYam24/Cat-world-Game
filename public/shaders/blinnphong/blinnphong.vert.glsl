@@ -18,6 +18,8 @@ void main() {
     vColor = vec4(1.0,1.0,1.0,1.0);
     #endif
     vNormal = normalMatrix * normal;
-    vPosition = modelViewMatrix * position;
-    gl_Position = projectionMatrix * modelViewMatrix * position;
+    vec4 position4 = vec4(position.xyz,1.0);
+    vPosition = modelViewMatrix * position4;
+    gl_Position = projectionMatrix * modelViewMatrix * position4;
+    vUv = uv;
 }

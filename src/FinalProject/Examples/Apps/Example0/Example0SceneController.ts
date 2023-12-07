@@ -44,6 +44,11 @@ export class Example0SceneController extends ExampleSceneController{
 
         this.defineInteractionMode("ExampleClick", ExampleClickInteractionMode.Create(this));
 
+        /**
+         * We can optionally set the starting interaction mode to be whatever we want here
+         */
+        // this.setCurrentInteractionMode("ExampleClick");
+
     }
 }
 

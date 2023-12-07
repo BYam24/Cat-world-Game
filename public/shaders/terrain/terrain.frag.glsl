@@ -20,9 +20,14 @@ uniform float diffuse;
 uniform float specular;
 uniform float specularExp;
 uniform float texCoordScale;
+uniform float textureTransition;
 
 uniform sampler2D diffuseMap;
 uniform bool diffuseMapProvided;
+
+// Adding an extra texture that we can sample from
+uniform sampler2D tex2Map;
+uniform bool tex2MapProvided;
 
 uniform sampler2D normalMap;
 uniform bool normalMapProvided;
@@ -84,6 +89,12 @@ void main()	{
     vec3 N = normalize( cross( dFdx( vPosition.xyz ), dFdy( vPosition.xyz ) ) );
     vec3 position = vPosition.xyz/vPosition.w;
     vec4 surface_color = texture(diffuseMap, vUv*texCoordScale);
+
+
+    // If the user provided a tex2 texture then we will render the x>0 part of the terrain using that
+    if(tex2MapProvided && vPosition.x > textureTransition*texCoordScale){
+        surface_color = texture(tex2Map, vUv*texCoordScale);
+    }
     float alpha = 1.0;
 
     vec3 specularLighting = vec3(0.0,0.0,0.0);
@@ -100,5 +111,6 @@ void main()	{
     // If all red that means you probably didn't add any point lights
     outColor = vec3(1.0,0.0,0.0);
     #endif
+
     gl_FragColor = vec4(outColor,surface_color.w);
 }

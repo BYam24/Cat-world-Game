@@ -79,7 +79,12 @@ vec3 evalSpecular(vec3 position, vec3 N, int lightIndex){
 void main()	{
     vec3 n = normalize(vNormal);
     vec3 p = vPosition.xyz/vPosition.w;
+    #ifdef USE_COLOR
     vec4 surface_color = vColor;
+    #else
+    vec4 surface_color = vec4(1.0,1.0,1.0,1.0);
+    #endif
+
     if(diffuseMapProvided){
         surface_color = surface_color*texture(diffuseMap, vUv);
     }else{
@@ -103,4 +108,10 @@ void main()	{
 
 
     gl_FragColor = vec4(lighting,surface_color.w);
+
+//    lighting = vec3(1.0,0.0,0.0);
+//    gl_FragColor = vec4(vUv.xy, 0.0,1.0);
+//    gl_FragColor = vec4(vNormal.xyz, 1.0);
+//    gl_FragColor = vec4(lighting.xyz,1.0);
+
 }

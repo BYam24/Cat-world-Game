@@ -1,7 +1,7 @@
 import {ACameraModel} from "./index";
 import {ANodeView} from "../nodeView";
 import * as THREE from "three";
-import {ASerializable} from "../../base";
+import {AObject, ASerializable} from "../../base";
 import {ANodeModel} from "../nodeModel";
 import {ACamera, Mat3, Mat4, TransformationInterface} from "../../math";
 
@@ -17,6 +17,15 @@ export class ACameraView extends ANodeView{
 
     get threeJSCamera():THREE.Camera{
         return this.threejs as THREE.Camera;
+    }
+
+
+    setModelListeners() {
+        super.setModelListeners();
+        const self = this;
+        this.model.addCameraProjectionListener((a:AObject)=>{
+            self.update();
+        })
     }
 
     // get threejs():THREE.Camera{

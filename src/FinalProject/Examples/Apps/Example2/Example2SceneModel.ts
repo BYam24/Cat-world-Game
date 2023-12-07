@@ -4,7 +4,7 @@ import {
     AInteractionEvent, ANodeModel3D,
     AObject3DModelWrapper,
     AppState,
-    AShaderMaterial, ATriangleMeshModel, GetAppState, NodeTransform,
+    AShaderMaterial, ATriangleMeshModel, GetAppState, Mat4, NodeTransform,
     NodeTransform3D,
     Quaternion,
     UnitQuadModel, V2,
@@ -16,6 +16,9 @@ import { ExampleSceneModel } from "../ExampleSceneModel";
 import {ABlinnPhongShaderModel} from "../../../../anigraph/rendering/shadermodels";
 import {ARenderTarget} from "../../../../anigraph/rendering/multipass/ARenderTarget";
 
+
+const VirtualScreenCameraIsMovingAppStateKey:string="MoveVirtualScreenCamera"
+const FlipVirtualScreenCameraAppStateKey:string="FlipVirtualScreenCamera"
 
 export class Example2SceneModel extends ExampleSceneModel {
     textureRenderTarget!:ARenderTarget
@@ -37,9 +40,15 @@ export class Example2SceneModel extends ExampleSceneModel {
      * @type {AShaderMaterial}
      */
     virtualScreenMaterial!: AShaderMaterial;
+    virtualScreenCameraIsMoving:boolean=false;
+    virtualScreenCameraIsFlipped:boolean=false;
+
+
 
     initAppState(appState: AppState) {
         ABlinnPhongShaderModel.AddAppState();
+        appState.addCheckboxControl(VirtualScreenCameraIsMovingAppStateKey, false);
+        appState.addCheckboxControl(FlipVirtualScreenCameraAppStateKey, false);
     }
 
     async PreloadAssets() {
@@ -76,7 +85,36 @@ export class Example2SceneModel extends ExampleSceneModel {
          * @type {ACameraModel}
          */
         this.virtualScreenCamera = new ACameraModel(ACamera.CopyOf(this.camera));
-        this.addChild(this.virtualScreenCamera);
+        // this.addChild(this.virtualScreenCamera);
+        this.cameraModel.addChild(this.virtualScreenCamera);
+
+        const self = this;
+        this.subscribeToAppState(VirtualScreenCameraIsMovingAppStateKey, (v:boolean)=>{
+            if(v) {
+                self.virtualScreenCameraIsMoving=true;
+            }else{
+                self.virtualScreenCameraIsMoving=false;
+
+                /**
+                 * We will reset the virtual screen camera's pose to the identity so that it is the same as our main
+                 * camera (because it is a child of our main camera)
+                 */
+                self.virtualScreenCamera.setPose(new NodeTransform3D());
+            }
+        })
+
+        this.subscribeToAppState(FlipVirtualScreenCameraAppStateKey, (v:boolean)=>{
+            self.virtualScreenCameraIsFlipped=v;
+            if(v){
+                self.virtualScreenCamera.setProjection(self.virtualScreenCamera.projection.times(Mat4.Scale3D(V3(1.0,-1.0,1.0))));
+            }else{
+                self.virtualScreenCamera.setProjection(self.camera.projection);
+
+            }
+        })
+
+
+
     }
 
     initCharacters(){
@@ -128,7 +166,6 @@ export class Example2SceneModel extends ExampleSceneModel {
      */
     prepForFirstPass(target?:ARenderTarget, ...args:any[]){
         this.virtualScreenMaterial.setTexture("input", target?target.targetTexture:undefined);
-        this.virtualScreenCamera.setPose(this.camera.pose);
     }
 
     /**
@@ -148,6 +185,12 @@ export class Example2SceneModel extends ExampleSceneModel {
     timeUpdate(t?: number, ...args:any[]) {
         t = t??this.clock.time;
         super.timeUpdateDescendants(t);
+
+        if(this.virtualScreenCameraIsMoving){
+            this.virtualScreenCamera.setPose(new NodeTransform3D(
+                V3(Math.sin(t)*0.22, 0, 0)
+            ))
+        }
 
     }
 
