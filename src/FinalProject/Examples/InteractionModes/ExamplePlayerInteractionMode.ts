@@ -12,6 +12,7 @@ import type {HasInteractionModeCallbacks} from "../../../anigraph"
 
 interface HasPosition3D{
     position:Vec3;
+    dig: boolean
 }
 
 @ASerializable("ExamplePlayerInteractionMode")
@@ -89,10 +90,15 @@ export class ExamplePlayerInteractionMode extends ASceneInteractionMode{
         }
         if(interaction.keysDownState['s']){
             this.cameraTarget.position.y = this.cameraTarget.position.y-this.keyboardMovementSpeed;
-
         }
         if(interaction.keysDownState['d']){
             this.cameraTarget.position.x = this.cameraTarget.position.x+this.keyboardMovementSpeed;
+        }
+        if(interaction.keysDownState['f']){
+            this.cameraTarget.dig = true;
+        }
+        if(interaction.keysDownState[' ']){
+            this.cameraTarget.position.z = this.cameraTarget.position.z+this.keyboardMovementSpeed;
         }
     }
 
@@ -104,6 +110,8 @@ export class ExamplePlayerInteractionMode extends ASceneInteractionMode{
         if(!interaction.keysDownState['s']){
         }
         if(!interaction.keysDownState['d']){
+        }
+        if(!interaction.keysDownState[' ']){
         }
         if(!interaction.keysDownState['r']){
         }

@@ -4,6 +4,8 @@ import { Example1SceneModel } from "./Example1SceneModel";
 import { DirectionalParticleSystemModel } from "../../Nodes/MyParticleSystem/DirectionalParticleSystemModel";
 import { DirectionalParticleSystemView } from "../../Nodes/MyParticleSystem/DirectionalParticleSystemView";
 
+
+
 export class Example1SceneController extends ExampleSceneController {
     get model(): Example1SceneModel {
         return this._model as Example1SceneModel;
@@ -27,6 +29,7 @@ export class Example1SceneController extends ExampleSceneController {
     initInteractions() {
         super.initInteractions();
         this.initExampleInteractions();
+
 
     }
 

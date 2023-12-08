@@ -8,6 +8,7 @@ import * as THREE from "three";
 export class LoadedCharacterModel extends ALoadedModel implements CharacterModelInterface{
     mass:number=1;
     velocity:Vec3 = V3();
+    dig:boolean = false;
 
     get position(){
         return this.transform.position;

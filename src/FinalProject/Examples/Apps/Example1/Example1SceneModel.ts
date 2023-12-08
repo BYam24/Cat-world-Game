@@ -14,6 +14,7 @@ import { DirectionalParticleSystemModel } from "../../Nodes/MyParticleSystem/Dir
 export class Example1SceneModel extends ExampleSceneModel {
     billboardParticles!: BillboardParticleSystemModel;
     directionalParticleSystem!: DirectionalParticleSystemModel;
+    gravity: number = -1.62;
 
     /**
      * Optionally add some app state here. Good place to set up custom control panel controls.
@@ -110,19 +111,33 @@ export class Example1SceneModel extends ExampleSceneModel {
         if (particle.position.z < height) { particle.position.z = height; }
     }
 
-
-
-
-
-
     timeUpdate(t: number, ...args: any[]) {
-
+        
         this.timeUpdateDescendants(t);
-        this.player.position = V3(-0.5, 0.7, 0);// move the cat to a specific place
-        this.terrain.reRollHeightMap() // set the terrain to flat
-        this.terrain.dig_hole(this.player.position.xy, 0.3, 0.5) // dig a hole right beneath the cat
+
+        // this.player.position = V3(-0.5, 0.7, 0);// move the cat to a specific place
+
+        // this.terrain.reRollHeightMap() // set the terrain to flat
+        // this.terrain.dig_hole(this.player.position.xy, 0.3, 0.5) // dig a hole right beneath the cat
         // this.terrain.dig_diamond_hole(this.player.position.xy,0.5,0.4) // dig a square hole right beneath the cat
-        this.player.position.z = this.terrain.getTerrainHeightAtPoint(this.player.position.xy) // adjust player's height based on the height map
+        // this.player.position.z = this.terrain.getTerrainHeightAtPoint(this.player.position.xy) // adjust player's height based on the height map
+        
+        //decelerate
+        let gravity = -1.62
+        let new_z = this.player.position.z + gravity * 0.001
+        if (new_z > this.terrain.getTerrainHeightAtPoint(this.player.position.xy)){
+            this.player.position.z = new_z
+        }
+        else{
+            this.player.position.z = this.terrain.getTerrainHeightAtPoint(this.player.position.xy) // adjust player's height based on the height map
+        }
+
+        if (this.player.dig && (this.player.position.z == this.terrain.getTerrainHeightAtPoint(this.player.position.xy))){
+            this.terrain.dig_hole(this.player.position.xy, 0.3, 0.5) // dig a hole right beneath the cat
+            this.terrain.dig_diamond_hole(this.player.position.xy,0.5,0.4) // dig a square hole right beneath the cat
+            this.player.dig = false
+        }
+
 
 
         for (let ei = 0; ei < this.bots.length; ei++) {

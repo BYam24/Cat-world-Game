@@ -118,6 +118,8 @@ export class Example3SceneController extends ExampleSceneController{
 
     initInteractions() {
         super.initInteractions();
+        this.initExampleInteractions();
+
     }
 
     onAnimationFrameCallback(context: AGLContext) {
