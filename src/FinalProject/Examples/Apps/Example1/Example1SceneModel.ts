@@ -14,7 +14,8 @@ import { DirectionalParticleSystemModel } from "../../Nodes/MyParticleSystem/Dir
 export class Example1SceneModel extends ExampleSceneModel {
     billboardParticles!: BillboardParticleSystemModel;
     directionalParticleSystem!: DirectionalParticleSystemModel;
-    gravity: number = -1.62;
+    gravity: number = -2.62;
+    camera_speed:number = 0.01;
 
     /**
      * Optionally add some app state here. Good place to set up custom control panel controls.
@@ -123,7 +124,8 @@ export class Example1SceneModel extends ExampleSceneModel {
         // this.player.position.z = this.terrain.getTerrainHeightAtPoint(this.player.position.xy) // adjust player's height based on the height map
         
         //decelerate
-        let gravity = -1.62
+        // let gravity = -1.62
+        let gravity = -5 // larger gravity
         let new_z = this.player.position.z + gravity * 0.001
         if (new_z > this.terrain.getTerrainHeightAtPoint(this.player.position.xy)){
             this.player.position.z = new_z
@@ -133,10 +135,31 @@ export class Example1SceneModel extends ExampleSceneModel {
         }
 
         if (this.player.dig && (this.player.position.z == this.terrain.getTerrainHeightAtPoint(this.player.position.xy))){
-            this.terrain.dig_hole(this.player.position.xy, 0.3, 0.5) // dig a hole right beneath the cat
-            this.terrain.dig_diamond_hole(this.player.position.xy,0.5,0.4) // dig a square hole right beneath the cat
+            if(this.player.dig_type == 0){
+                this.terrain.dig_hole(this.player.position.xy, 0.3, 0.5) // dig a hole right beneath the cat
+            }
+            else if(this.player.dig_type == 1){
+                this.terrain.dig_diamond_hole(this.player.position.xy,0.5,0.4) // dig a square hole right beneath the cat
+            }
+            else if(this.player.dig_type == 2){
+                this.terrain.pile_hill(this.player.position.xy, 0.3, 0.5)
+            }
+            else if(this.player.dig_type == 3){
+                this.terrain.pile_pyramid(this.player.position.xy,0.5,0.4)
+            }
+
             this.player.dig = false
         }
+
+
+        this.cameraModel.setPose(
+            NodeTransform3D.LookAt(
+                // final_camera_pos,
+                this.player.position.plus(V3(0,-1,1)),
+                this.player.position,
+                V3(0, 0, 1)
+            )
+        )
 
 
 

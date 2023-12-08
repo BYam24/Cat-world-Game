@@ -10,6 +10,8 @@ export class LoadedCharacterModel extends ALoadedModel implements CharacterModel
     velocity:Vec3 = V3();
     dig:boolean = false;
 
+    dig_type:number = 0;
+
     get position(){
         return this.transform.position;
     }

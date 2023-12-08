@@ -202,7 +202,6 @@ export class TerrainModel extends ATerrainModel{
         let uv_pos = this.get_uv_on_texture(world_pos)
         let r_x = radius/this.width*this.widthSegments
         let r_y = radius/this.height*this.heightSegments
-        console.log(this.heightMap.width, this.heightMap.height)
         for(let y=0;y<this.heightMap.height;y++){
             for(let x=0;x<this.heightMap.width;x++) {
                 let d_x = (x-uv_pos.x)
@@ -212,6 +211,30 @@ export class TerrainModel extends ATerrainModel{
                     let height = this.get_cos_height(r,depth);
                     // console.log(x,y)
                     if (height<this.heightMap.pixelData.getPixelNN(x,y)){
+                        this.heightMap.setPixelNN(x, y, height);
+                    }
+
+                }
+
+            }
+        }
+        this.heightMap.setTextureNeedsUpdate();
+    }
+
+    pile_hill(world_pos:Vec2, depth = 0.3, radius = 0.5){
+        // dig a hole at the world_pos in world coordinate
+        let uv_pos = this.get_uv_on_texture(world_pos)
+        let r_x = radius/this.width*this.widthSegments
+        let r_y = radius/this.height*this.heightSegments
+        for(let y=0;y<this.heightMap.height;y++){
+            for(let x=0;x<this.heightMap.width;x++) {
+                let d_x = (x-uv_pos.x)
+                let d_y = (y-uv_pos.y)
+                let r = (d_x/r_x)*(d_x/r_x) + (d_y/r_y)*(d_y/r_y)
+                if (this.in_hole_range(r)){
+                    let height = -this.get_cos_height(r,depth);
+                    // console.log(x,y)
+                    if (height>this.heightMap.pixelData.getPixelNN(x,y)){
                         this.heightMap.setPixelNN(x, y, height);
                     }
 
@@ -238,6 +261,31 @@ export class TerrainModel extends ATerrainModel{
                     let height = -Math.min(1-Math.abs(d_x/r_x), 1-Math.abs(d_y/r_y))*depth;
                     // console.log(x,y)
                     if (height<this.heightMap.pixelData.getPixelNN(x,y)){
+                        this.heightMap.setPixelNN(x, y, height);
+                    }
+
+                }
+
+            }
+        }
+        this.heightMap.setTextureNeedsUpdate();
+    }
+
+    pile_pyramid(world_pos:Vec2, depth = 0.3, radius = 0.5){
+        // dig a hole at the world_pos in world coordinate
+        let uv_pos = this.get_uv_on_texture(world_pos)
+        let r_x = radius/this.width*this.widthSegments
+        let r_y = radius/this.height*this.heightSegments
+        console.log(this.heightMap.width, this.heightMap.height)
+        for(let y=0;y<this.heightMap.height;y++){
+            for(let x=0;x<this.heightMap.width;x++) {
+                let d_x = (x-uv_pos.x)
+                let d_y = (y-uv_pos.y)
+                let r = (d_x/r_x)*(d_x/r_x) + (d_y/r_y)*(d_y/r_y)
+                if (r_x>d_x && d_x>-r_x && r_y>d_y && d_y>-r_y){
+                    let height = Math.min(1-Math.abs(d_x/r_x), 1-Math.abs(d_y/r_y))*depth;
+                    // console.log(x,y)
+                    if (height>this.heightMap.pixelData.getPixelNN(x,y)){
                         this.heightMap.setPixelNN(x, y, height);
                     }
 
