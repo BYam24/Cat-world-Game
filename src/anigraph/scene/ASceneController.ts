@@ -172,6 +172,7 @@ export abstract class ASceneController extends AController implements HasModelVi
         this.renderer.clear()
         await this.model.confirmInitialized();
         this._cameraView = ACameraView.Create(this.model.cameraModel);
+        this.view.threejs.add(this._cameraView.threejs);
         await this.initScene();
         this.addModelSubscriptions();
         this.readyToRender = true;

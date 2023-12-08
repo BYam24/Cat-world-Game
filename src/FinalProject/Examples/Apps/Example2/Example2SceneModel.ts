@@ -19,6 +19,8 @@ import {ARenderTarget} from "../../../../anigraph/rendering/multipass/ARenderTar
 
 const VirtualScreenCameraIsMovingAppStateKey:string="MoveVirtualScreenCamera"
 const FlipVirtualScreenCameraAppStateKey:string="FlipVirtualScreenCamera"
+const UseNDCCoordsTrick:string="UseNDCCoordsTrick"
+const ShowMirrorTextureCoords:string="ShowMirrorTextureCoords";
 
 export class Example2SceneModel extends ExampleSceneModel {
     textureRenderTarget!:ARenderTarget
@@ -49,6 +51,8 @@ export class Example2SceneModel extends ExampleSceneModel {
         ABlinnPhongShaderModel.AddAppState();
         appState.addCheckboxControl(VirtualScreenCameraIsMovingAppStateKey, false);
         appState.addCheckboxControl(FlipVirtualScreenCameraAppStateKey, false);
+        appState.addCheckboxControl(UseNDCCoordsTrick, false);
+        appState.addCheckboxControl(ShowMirrorTextureCoords, false);
     }
 
     async PreloadAssets() {
@@ -62,14 +66,20 @@ export class Example2SceneModel extends ExampleSceneModel {
         /**
          * Load a custom shader. We will use this when we render our texture to the screen
          */
-        await appState.loadShaderMaterialModel("postprocessing");
-        this.virtualScreenMaterial = appState.CreateShaderMaterial("postprocessing");
+        // await appState.loadShaderMaterialModel("postprocessing");
+        // this.virtualScreenMaterial = appState.CreateShaderMaterial("postprocessing");
+
+        await appState.loadShaderMaterialModel("mirror")
+        this.virtualScreenMaterial = appState.CreateShaderMaterial("mirror");
+
 
         /**
          * Add a slider to control one of our uniforms
          */
         appState.addSliderIfMissing("sliderValue", 0,-1,1,0.01);
         this.virtualScreenMaterial.attachUniformToAppState("sliderValue", "sliderValue")
+
+
 
     }
 
@@ -112,9 +122,6 @@ export class Example2SceneModel extends ExampleSceneModel {
 
             }
         })
-
-
-
     }
 
     initCharacters(){
@@ -154,6 +161,8 @@ export class Example2SceneModel extends ExampleSceneModel {
          */
         this.virtualScreen =new ATriangleMeshModel();
         this.virtualScreen.setVerts(this.createFlippedTexturedQuadGeometry());
+        this.virtualScreenMaterial.attachUniformToAppState("useNDCCoords", UseNDCCoordsTrick)
+        this.virtualScreenMaterial.attachUniformToAppState("showTextureCoords", ShowMirrorTextureCoords)
         this.virtualScreen.setMaterial(this.virtualScreenMaterial);
         this.virtualScreen.setTransform(new NodeTransform3D(V3(0,-0.75,0.0), Quaternion.RotationX(Math.PI*0.5)));
         this.addChild(this.virtualScreen);

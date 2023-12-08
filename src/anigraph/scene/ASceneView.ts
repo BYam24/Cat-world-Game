@@ -29,6 +29,7 @@ export class ASceneView extends AView implements HasModelViewMap {
         this._controller = controller;
         this._threeJSScene = new THREE.Scene();
         this._threejs = new THREE.Group();
+        this._threejs.matrixAutoUpdate=false;
         this._threeJSScene.add(this.threejs);
     }
 
