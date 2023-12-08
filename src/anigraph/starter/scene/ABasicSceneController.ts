@@ -175,6 +175,11 @@ export abstract class ABasicSceneController extends ASceneController {
         this._updateInteractionModeOptions();
     }
 
+    deleteInteractionMode(name: string){
+        this._interactions.undefineMode(name);
+        this._updateInteractionModeOptions();
+    }
+
     _updateInteractionModeOptions(){
         let appState = GetAppState();
         appState.setSelectionControl(
