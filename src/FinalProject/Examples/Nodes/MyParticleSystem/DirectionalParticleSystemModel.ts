@@ -98,7 +98,7 @@ export class DirectionalParticleSystemModel extends AInstancedParticleSystemMode
       let age = t - p.t0;
 
       let shrinkRate = 0.005;
-      p.size = Math.max(p.size * (1 - age * shrinkRate), 0);
+      p.size = Math.max(p.size * (1 - shrinkRate), 0);
 
       if (p.position.z <= 0) {
         p.visible = false
