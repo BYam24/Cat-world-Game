@@ -161,7 +161,7 @@ export class Example1SceneModel extends ExampleSceneModel {
         this.cameraModel.setPose(
             NodeTransform3D.LookAt(
                 // final_camera_pos,
-                this.player.position.plus(V3(0,-1,1)),
+                this.player.position.plus(V3(-0.15,-1,1)),
                 this.player.position,
                 V3(0, 0, 1)
             )
