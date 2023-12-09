@@ -133,6 +133,11 @@ export abstract class AAppState extends AHandlesEvents{
         );
     }
 
+
+    CreateControlPanelButtonSpec(callback:()=>void, otherSpecs?:{[name:string]:any}):GUIControlSpec{
+        return GUISpecs.ButtonControl(callback, otherSpecs);
+    }
+
     CreateControlPanelSelectionSpec(stateName:string, initialValue:any, options:any[], otherSpecs?:{[name:string]:any}):GUIControlSpec{
         const self = this;
         return GUISpecs.SelectionControl(
@@ -169,6 +174,15 @@ export abstract class AAppState extends AHandlesEvents{
         // this.setUniform(TextureProvidedKeyForName(name), !!tex, 'bool');
     }
 
+    /**
+     * Add a button that triggers a provided callback
+     * @param name
+     * @param callback
+     */
+    addButton(name:string, callback:()=>void){
+        this.setGUIControlSpecKey(name, this.CreateControlPanelButtonSpec(callback));
+    }
+
     addColorControl(name:string, initialValue:Color){
         this.setGUIControlSpecKey(name,this.CreateControlPanelColorPickerSpec(name, initialValue));
     }
@@ -189,6 +203,9 @@ export abstract class AAppState extends AHandlesEvents{
             handle,
             );
     }
+
+
+
 
     addControlSpec(controlSpec:{[name:string]:GUIControlSpec}){
         this.GUIControlSpecs = {

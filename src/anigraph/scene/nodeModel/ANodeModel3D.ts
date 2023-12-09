@@ -38,7 +38,8 @@ export class ANodeModel3D extends ANodeModelSubclass<NodeTransform3D, VertexArra
      * @returns {BoundingBox3D}
      */
     getBounds3D(): BoundingBox3D {
-        let b = this.verts.getBounds();
+        // let b = this.verts.getBounds();
+        let b = this.geometry.getBounds()
         b.transform = this.transform.getMat4();
         return b;
     }
