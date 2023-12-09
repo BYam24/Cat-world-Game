@@ -12,7 +12,7 @@ export class DirectionalParticleSystemModel extends AInstancedParticleSystemMode
   timesRun: number = 0;
   curr_position = new Vec3(0, 0, 0)
 
-  constructor(nParticles: number = 50) {
+  constructor(nParticles: number = 100) {
     super(nParticles);
     this.initParticles(nParticles);
     this.signalParticlesUpdated();
@@ -41,7 +41,7 @@ export class DirectionalParticleSystemModel extends AInstancedParticleSystemMode
 
 
 
-    this.particles[i].size = radius ?? (0.05 + Math.random() * 0.15);
+    this.particles[i].size = radius ?? (0.75 + Math.random() * 0.85);
 
 
 
@@ -96,8 +96,9 @@ export class DirectionalParticleSystemModel extends AInstancedParticleSystemMode
       p.velocity = p.velocity.plus(this.gravity);
 
       let age = t - p.t0;
-      let shrinkRate = 0.01;
-      p.size = Math.max(p.size * (1 - age * shrinkRate), 0);
+
+      let shrinkRate = 0.005;
+      p.size = Math.max(p.size * (1 - shrinkRate), 0);
 
       if (p.position.z <= 0) {
         p.visible = false
