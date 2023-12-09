@@ -2,7 +2,7 @@ import {
     ACameraModel, AInteractionEvent,
     AppState,
     NodeTransform3D, Particle3D,
-    V3, Vec2, Vec3,
+    V3, Vec2, Vec3, AShaderModel, AShaderModelBase, AShaderMaterial
 } from "../../../../anigraph";
 import {
     BillboardParticleSystemModel, SphereParticle,
