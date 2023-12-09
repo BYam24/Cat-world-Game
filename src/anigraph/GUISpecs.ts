@@ -1,4 +1,4 @@
-import {folder} from "leva";
+import {button, folder} from "leva";
 import {SHADER_UNIFORM_TYPES} from "./basictypes";
 import {Color} from "./math/Color";
 import tinycolor from "tinycolor2";
@@ -54,6 +54,10 @@ export class GUISpecs{
             },
             ...otherSpecs
         }
+    }
+
+    static ButtonControl(callback:()=>void, otherSpecs?:{[name:string]:any}){
+        return button(callback, otherSpecs);
     }
 
     static CheckboxControl(onChange:(value:boolean)=>void, initialValue?:boolean, otherSpecs?:{[name:string]:any}){

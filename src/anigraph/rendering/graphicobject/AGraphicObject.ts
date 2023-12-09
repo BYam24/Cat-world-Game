@@ -19,6 +19,9 @@ export abstract class AGraphicObject implements HasThreeJSObject{
         // console.log("Material Update!")
     }
     onMaterialChange(newMaterial:AMaterial, ...args:any[]){
+        if(this.threejs instanceof THREE.Mesh){
+            (this.threejs as THREE.Mesh).material = newMaterial._material;
+        }
     }
     setColor(color:Color){
     }

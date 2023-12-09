@@ -3,7 +3,7 @@ import {ASerializable, AObject} from "../../base";
 import {MaterialParameters} from "three/src/materials/Material";
 import {AMaterialModel} from "./AMaterialModel";
 import {Color} from "../../math";
-
+import * as THREE from "three";
 
 enum AMaterialEvents{
     CHANGE='MATERIAL_CHANGE',
@@ -15,6 +15,12 @@ export class AMaterial extends AObject{
     protected _model!:AMaterialModel;
     public _material!:THREE.Material;
     static Events = AMaterialEvents;
+
+    static GEOMETRY_SIDE = {
+        FRONT:THREE.FrontSide,
+        BACK:THREE.BackSide,
+        BOTH:THREE.DoubleSide
+    };
     get threejs(){return this._material;}
 
     get model(){
@@ -42,6 +48,16 @@ export class AMaterial extends AObject{
     get visible(){return this.getValue('visible');}
     set visible(value:boolean|undefined){this.setValue('visible',value)}
 
+
+    /**
+     * GEOMETRY_SIDE.BOTH to render both front and back faces
+     * GEOMETRY_SIDE.FRONT to render front faces only
+     * GEOMETRY_SIDE.BACK to render back faces only
+     * @param renderSide
+     */
+    setRenderSide(renderSide:THREE.Side){
+        this._material.side = renderSide;
+    }
 
     //##################//--Values--\\##################
     //<editor-fold desc="Values">
