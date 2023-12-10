@@ -11,7 +11,7 @@ export class FlameParticleSystemModel extends AInstancedParticleSystemModel<Sphe
   lastEmittedIndex: number = 0;
   curr_position = new Vec3(0, 0, 0)
 
-  constructor(nParticles: number = 10000) {
+  constructor(nParticles: number = 2000) {
     super(nParticles);
     this.initParticles(nParticles);
     this.signalParticlesUpdated();
@@ -35,7 +35,7 @@ export class FlameParticleSystemModel extends AInstancedParticleSystemModel<Sphe
     let y_offset = Math.random() * 0.2
 
 
-    this.particles[i].velocity = new Vec3(-0.005, -0.005, .01)
+    this.particles[i].velocity = new Vec3(-0.0005, -0.0005, .005)
 
     this.particles[i].color = new Color(255, 0, 0);
 

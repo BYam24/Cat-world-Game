@@ -9,6 +9,7 @@ export class LoadedCharacterModel extends ALoadedModel implements CharacterModel
     mass:number=1;
     velocity:Vec3 = V3();
     dig:boolean = false;
+    fire: boolean =false;
 
     dig_type:number = 0;
 

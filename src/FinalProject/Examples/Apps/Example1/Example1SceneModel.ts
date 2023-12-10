@@ -25,6 +25,7 @@ export class Example1SceneModel extends ExampleSceneModel {
     camera_speed: number = 0.01;
     previous_t: number = 0;
     camera_look_at: Vec3 = V3(0, 0, 0);
+    allowFlame: boolean = true;
 
     /**
      * Optionally add some app state here. Good place to set up custom control panel controls.
@@ -105,9 +106,9 @@ export class Example1SceneModel extends ExampleSceneModel {
         // this.addExampleBilboardParticleSystem();
 
 
-        this.flameParticleSystem = new FlameParticleSystemModel();
+        // this.flameParticleSystem = new FlameParticleSystemModel();
 
-        this.addChild(this.flameParticleSystem)
+        // this.addChild(this.flameParticleSystem)
 
 
 
@@ -152,21 +153,29 @@ export class Example1SceneModel extends ExampleSceneModel {
 
         //decelerate
         // let gravity = -1.62
-        let gravity = -5 // larger gravity
+        // this.player.velocity = new Vec3(1000,1000,1000);
+        let gravity = Math.min(-5 * this.player.position.z/.4, -5) // larger gravity
         let new_z = this.player.position.z + gravity * 0.0008
         let directionalParticleSystem = new DirectionalParticleSystemModel()
+        let flameParticleSystem = new FlameParticleSystemModel()
 
+        if (this.player.position.z == this.terrain.getTerrainHeightAtPoint(this.player.position.xy) ){
+            this.allowFlame = true
+        }
+  
 
         if (new_z > this.terrain.getTerrainHeightAtPoint(this.player.position.xy)) {
+
             this.player.position.z = new_z
+
         }
         else {
             this.player.position.z = this.terrain.getTerrainHeightAtPoint(this.player.position.xy) // adjust player's height based on the height map
         }
 
         if (this.player.dig && (this.player.position.z == this.terrain.getTerrainHeightAtPoint(this.player.position.xy))) {
-
-
+            directionalParticleSystem.curr_position = this.player.position
+            this.addChild(directionalParticleSystem)
             if (this.player.dig_type == 0) {
                 this.terrain.dig_hole(this.player.position.xy, 0.3, 0.5) // dig a hole right beneath the cat
 
@@ -182,6 +191,13 @@ export class Example1SceneModel extends ExampleSceneModel {
             }
 
             this.player.dig = false
+        }
+
+        if (this.player.fire){
+            let offset = new Vec3(0, -0.4 , 0)
+            flameParticleSystem.curr_position = this.player.position.plus(offset)
+            this.addChild(flameParticleSystem)
+            this.player.fire = false
         }
 
 
