@@ -8,6 +8,7 @@ varying vec2 vUv;
 
 uniform float outlineWidth; // Uniform for outline width
 uniform bool outline;
+uniform vec3 cameraPos;
 
 void main() {
     // We can use macros in shaders.
@@ -18,9 +19,13 @@ void main() {
     vColor = vec4(1.0,1.0,1.0,1.0);
     #endif
     vNormal = normalMatrix * normal;
+//
+//    vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+//    float distance = length(cameraPos - worldPosition.xyz);
+//    float adjustedOutline = outlineWidth * distance;
 
     // let's create a variable that represents the position modulated by a sin wave
-
+//    vec3 outlinePosition = position + (normalize(vNormal)* adjustedOutline);
     vec3 outlinePosition = position + (normalize(vNormal) * outlineWidth);
     // We will pass a varying vec4 that represents position in the camera's frame of reference
     // this will be interpolated during rasterization to give us a per-fragment value in our fragment shader
