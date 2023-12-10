@@ -213,11 +213,13 @@ export class Example1SceneModel extends ExampleSceneModel {
         this.previous_t = t;
         let cur_camera_pos = this.camera.position;
         let l_pos = 0.25
-        let target_camera_pos = this.player.position.plus(V3(0, -1, 1));
+        // let target_camera_pos = this.player.position.plus(V3(0, -1, 1));
+        let target_camera_pos = this.player.position.plus(V3(-0.3, -1, 2));
         let final_camera_pos = cur_camera_pos.plus(target_camera_pos.minus(cur_camera_pos).times(Math.min(1, delta_t / l_pos)))
 
         let cur_look_at = this.camera_look_at
-        let target_look_at = this.player.position
+        // let target_look_at = this.player.position
+        let target_look_at = this.player.position.plus(V3(-0.3,0,1))
         let l_look_at = 0.25
         this.camera_look_at = cur_look_at.plus(target_look_at.minus(cur_look_at).times(Math.min(1, delta_t / l_look_at)))
 
