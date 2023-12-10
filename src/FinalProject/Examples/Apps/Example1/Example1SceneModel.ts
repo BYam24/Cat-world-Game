@@ -8,21 +8,23 @@ import {
     BillboardParticleSystemModel, SphereParticle,
 } from "../../Nodes";
 import { ExampleSceneModel } from "../ExampleSceneModel";
-import {ToonShaderModel} from "./ToonShaderModel";
+import { ToonShaderModel } from "./ToonShaderModel";
 import { ABlinnPhongShaderModel } from "../../../../anigraph/rendering/shadermodels";
 import { DirectionalParticleSystemModel } from "../../Nodes/MyParticleSystem/DirectionalParticleSystemModel";
+import { FlameParticleSystemModel } from "../../Nodes/FlameParticleSystem/FlameParticleSystemModel";
 
-enum SHADERS{
-    TOONSHADER="toonshader",
+enum SHADERS {
+    TOONSHADER = "toonshader",
 }
 
 export class Example1SceneModel extends ExampleSceneModel {
     billboardParticles!: BillboardParticleSystemModel;
     directionalParticleSystem!: DirectionalParticleSystemModel;
+    flameParticleSystem!: FlameParticleSystemModel
     gravity: number = -2.62;
-    camera_speed:number = 0.01;
-    previous_t:number = 0;
-    camera_look_at:Vec3 = V3(0,0,0);
+    camera_speed: number = 0.01;
+    previous_t: number = 0;
+    camera_look_at: Vec3 = V3(0, 0, 0);
 
     /**
      * Optionally add some app state here. Good place to set up custom control panel controls.
@@ -51,7 +53,7 @@ export class Example1SceneModel extends ExampleSceneModel {
         await this.LoadTheCat();
 
         await GetAppState().addShaderMaterialModel(SHADERS.TOONSHADER, ToonShaderModel);
-        GetAppState().getShaderMaterialModel(SHADERS.TOONSHADER).usesVertexColors=true;
+        GetAppState().getShaderMaterialModel(SHADERS.TOONSHADER).usesVertexColors = true;
     }
 
 
@@ -107,6 +109,10 @@ export class Example1SceneModel extends ExampleSceneModel {
 
         // this.addChild(this.directionalParticleSystem)
 
+        this.flameParticleSystem = new FlameParticleSystemModel();
+
+        this.addChild(this.flameParticleSystem)
+
 
 
 
@@ -132,11 +138,11 @@ export class Example1SceneModel extends ExampleSceneModel {
         if (particle.position.z < height) { particle.position.z = height; }
     }
 
-    startOutlineRendering(){
+    startOutlineRendering() {
     }
 
     timeUpdate(t: number, ...args: any[]) {
-        
+
         this.timeUpdateDescendants(t);
 
         // this.player.position = V3(-0.5, 0.7, 0);// move the cat to a specific place
@@ -145,7 +151,7 @@ export class Example1SceneModel extends ExampleSceneModel {
         // this.terrain.dig_hole(this.player.position.xy, 0.3, 0.5) // dig a hole right beneath the cat
         // this.terrain.dig_diamond_hole(this.player.position.xy,0.5,0.4) // dig a square hole right beneath the cat
         // this.player.position.z = this.terrain.getTerrainHeightAtPoint(this.player.position.xy) // adjust player's height based on the height map
-        
+
         //decelerate
         // let gravity = -1.62
         let gravity = -5 // larger gravity
@@ -153,29 +159,29 @@ export class Example1SceneModel extends ExampleSceneModel {
         let directionalParticleSystem = new DirectionalParticleSystemModel()
 
 
-        if (new_z > this.terrain.getTerrainHeightAtPoint(this.player.position.xy)){
+        if (new_z > this.terrain.getTerrainHeightAtPoint(this.player.position.xy)) {
             this.player.position.z = new_z
         }
-        else{
+        else {
             this.player.position.z = this.terrain.getTerrainHeightAtPoint(this.player.position.xy) // adjust player's height based on the height map
         }
 
-        if (this.player.dig && (this.player.position.z == this.terrain.getTerrainHeightAtPoint(this.player.position.xy))){
+        if (this.player.dig && (this.player.position.z == this.terrain.getTerrainHeightAtPoint(this.player.position.xy))) {
             directionalParticleSystem.curr_position = this.player.position
             this.addChild(directionalParticleSystem)
 
-            if(this.player.dig_type == 0){
+            if (this.player.dig_type == 0) {
                 this.terrain.dig_hole(this.player.position.xy, 0.3, 0.5) // dig a hole right beneath the cat
 
             }
-            else if(this.player.dig_type == 1){
-                this.terrain.dig_diamond_hole(this.player.position.xy,0.5,0.4) // dig a square hole right beneath the cat
+            else if (this.player.dig_type == 1) {
+                this.terrain.dig_diamond_hole(this.player.position.xy, 0.5, 0.4) // dig a square hole right beneath the cat
             }
-            else if(this.player.dig_type == 2){
+            else if (this.player.dig_type == 2) {
                 this.terrain.pile_hill(this.player.position.xy, 0.3, 0.5)
             }
-            else if(this.player.dig_type == 3){
-                this.terrain.pile_pyramid(this.player.position.xy,0.5,0.4)
+            else if (this.player.dig_type == 3) {
+                this.terrain.pile_pyramid(this.player.position.xy, 0.5, 0.4)
             }
 
             this.player.dig = false
@@ -190,17 +196,17 @@ export class Example1SceneModel extends ExampleSceneModel {
         //         V3(0, 0, 1)
         //     )
         // )
-        let delta_t = t-this.previous_t;
-        this.previous_t =t;
+        let delta_t = t - this.previous_t;
+        this.previous_t = t;
         let cur_camera_pos = this.camera.position;
         let l_pos = 0.25
-        let target_camera_pos = this.player.position.plus(V3(0,-1,1));
-        let final_camera_pos = cur_camera_pos.plus(target_camera_pos.minus(cur_camera_pos).times(Math.min(1,delta_t/l_pos)))
+        let target_camera_pos = this.player.position.plus(V3(0, -1, 1));
+        let final_camera_pos = cur_camera_pos.plus(target_camera_pos.minus(cur_camera_pos).times(Math.min(1, delta_t / l_pos)))
 
         let cur_look_at = this.camera_look_at
         let target_look_at = this.player.position
         let l_look_at = 0.25
-        this.camera_look_at = cur_look_at.plus(target_look_at.minus(cur_look_at).times(Math.min(1,delta_t/l_look_at)))
+        this.camera_look_at = cur_look_at.plus(target_look_at.minus(cur_look_at).times(Math.min(1, delta_t / l_look_at)))
 
         this.cameraModel.setPose(
             NodeTransform3D.LookAt(

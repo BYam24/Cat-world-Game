@@ -1,23 +1,23 @@
-import { DirectionalParticleSystemModel } from "./DirectionalParticleSystemModel";
+import { FlameParticleSystemModel } from "./FlameParticleSystemModel";
 import { Color, Mat3, Mat4, NodeTransform3D, Quaternion, Vec3 } from "../../../../anigraph";
 import {
   AInstancedParticleSystemGraphic, AInstancedParticleSystemView,
 } from "../../../../anigraph/effects/particles/InstancedParticles";
-import { DirectionalParticleSystemGraphic } from "./DirectionalParticleSystemGraphic";
+import { FlameParticleSystemGraphic } from "./FlameParticleSystemGraphic";
 import { SphereParticle } from "./SphereParticle";
 
-export class DirectionalParticleSystemView extends AInstancedParticleSystemView<SphereParticle>{
+export class FlameParticleSystemView extends AInstancedParticleSystemView<SphereParticle>{
   static MAX_PARTICLES = 300;
 
-  get particlesElement(): DirectionalParticleSystemGraphic {
-    return this._particlesElement as DirectionalParticleSystemGraphic;
+  get particlesElement(): FlameParticleSystemGraphic {
+    return this._particlesElement as FlameParticleSystemGraphic;
   }
-  get model(): DirectionalParticleSystemModel {
-    return this._model as DirectionalParticleSystemModel;
+  get model(): FlameParticleSystemModel {
+    return this._model as FlameParticleSystemModel;
   }
 
-  createParticlesElement(...args: any[]): DirectionalParticleSystemGraphic {
-    return AInstancedParticleSystemGraphic.Create(DirectionalParticleSystemView.MAX_PARTICLES,
+  createParticlesElement(...args: any[]): FlameParticleSystemGraphic {
+    return AInstancedParticleSystemGraphic.Create(FlameParticleSystemView.MAX_PARTICLES,
       this.model.material);
   }
 
