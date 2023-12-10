@@ -29,8 +29,6 @@ export class Example1SceneController extends ExampleSceneController {
     initInteractions() {
         super.initInteractions();
         this.initExampleInteractions();
-
-
     }
 
     onAnimationFrameCallback(context:AGLContext) {
@@ -56,10 +54,9 @@ export class Example1SceneController extends ExampleSceneController {
         let ogColor = this.model.player.material.getModelColor();
 
         // render the scene view
+        // this.model.player.material.setUniform3fv("cameraPos", this.cameraModel.pose.getPosition());
         this.model.player.material.setRenderSide(AMaterial.GEOMETRY_SIDE.BACK);
         this.model.player.material.setUniform("outline", true, "bool");
-
-        // this.model.player.material.setUniformColor("black", new Color(0,0,0), 1.0);
         context.renderer.render(this.getThreeJSScene(), this.getThreeJSCamera());
 
         this.model.player.material.setRenderSide(AMaterial.GEOMETRY_SIDE.FRONT);
