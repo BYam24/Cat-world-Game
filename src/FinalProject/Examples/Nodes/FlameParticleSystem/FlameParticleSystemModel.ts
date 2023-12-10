@@ -88,11 +88,11 @@ export class FlameParticleSystemModel extends AInstancedParticleSystemModel<Sphe
 
       let p = this.particles[i];
 
-      if ((p.negative_x && p.position.x < 0) || (!p.negative_x && p.position.x > 0)) {
+      if ((p.negative_x && p.position.x < this.curr_position.x) || (!p.negative_x && p.position.x > this.curr_position.x)) {
         p.position = p.position.plus(p.velocity);
       }
 
-      if ((p.negative_y && p.position.y < 0) || (!p.negative_y && p.position.y > 0)) {
+      if ((p.negative_y && p.position.y < this.curr_position.y) || (!p.negative_y && p.position.y > this.curr_position.y)) {
         p.position = p.position.plus(p.velocity);
       }
 

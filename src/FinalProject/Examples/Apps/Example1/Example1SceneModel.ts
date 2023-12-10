@@ -105,13 +105,11 @@ export class Example1SceneModel extends ExampleSceneModel {
         // this.addExampleBilboardParticleSystem();
 
 
-        // this.directionalParticleSystem = new DirectionalParticleSystemModel();
-
-        // this.addChild(this.directionalParticleSystem)
-
         this.flameParticleSystem = new FlameParticleSystemModel();
 
         this.addChild(this.flameParticleSystem)
+
+
 
 
 
@@ -167,8 +165,7 @@ export class Example1SceneModel extends ExampleSceneModel {
         }
 
         if (this.player.dig && (this.player.position.z == this.terrain.getTerrainHeightAtPoint(this.player.position.xy))) {
-            directionalParticleSystem.curr_position = this.player.position
-            this.addChild(directionalParticleSystem)
+
 
             if (this.player.dig_type == 0) {
                 this.terrain.dig_hole(this.player.position.xy, 0.3, 0.5) // dig a hole right beneath the cat
