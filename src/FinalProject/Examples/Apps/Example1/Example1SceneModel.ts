@@ -105,15 +105,7 @@ export class Example1SceneModel extends ExampleSceneModel {
 
         // this.addChild(this.directionalParticleSystem)
 
-        GetAppState().addCheckboxControl("CullFront", false);
-        const self = this;
-        this.subscribeToAppState("CullFront", (v:boolean)=>{
-            if(v) {
-                self.player.material.setRenderSide(AMaterial.GEOMETRY_SIDE.BACK)
-            }else{
-                self.player.material.setRenderSide(AMaterial.GEOMETRY_SIDE.FRONT)
-            }
-        })
+
 
 
 
@@ -136,6 +128,9 @@ export class Example1SceneModel extends ExampleSceneModel {
     adjustParticleHeight(particle: Particle3D) {
         let height = this.terrain.getTerrainHeightAtPoint(particle.position.xy);
         if (particle.position.z < height) { particle.position.z = height; }
+    }
+
+    startOutlineRendering(){
     }
 
     timeUpdate(t: number, ...args: any[]) {

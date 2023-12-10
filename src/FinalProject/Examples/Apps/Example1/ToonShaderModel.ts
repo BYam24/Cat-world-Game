@@ -1,6 +1,18 @@
 import {ABlinnPhongShaderModel} from "../../../../anigraph/rendering/shadermodels";
-import {AAppState, AShaderMaterial, AShaderModel, AShaderModelBase, ATexture, Color, GetAppState, Vec3} from "../../../../anigraph";
+import {
+    AAppState,
+    AShaderMaterial,
+    AShaderModel,
+    AShaderModelBase,
+    ATexture,
+    BlinnPhongDefaults,
+    Color,
+    GetAppState,
+    Vec3
+} from "../../../../anigraph";
 enum AppStateKeys{
+    AMBIENT = "ambient",
+    DIFFUSE = "diffuse",
     SURFACE_COLORING = "surfaceColoring",
     USE_VIEWLIGHT = "useViewLight",
     OUTLINE_WIDTH = "outlineWidth",
@@ -9,14 +21,17 @@ enum AppStateKeys{
 
 export class ToonShaderModel extends ABlinnPhongShaderModel {
     static AddAppState(){
-        let appState = GetAppState();
         super.AddAppState();
-        appState.addControlSpecGroup("CustomLoadedShader",
+
+        let appState = GetAppState();
+        appState.addControlSpecGroup("ToonShader",
             {
+                Ambient: appState.CreateControlPanelSliderSpec(AppStateKeys.AMBIENT, 1.0, 0.0, 2.0, 0.05),
+                Diffuse : appState.CreateControlPanelSliderSpec(AppStateKeys.DIFFUSE, .4, 0.0, 1.0, 0.001),
                 SurfaceColoring: appState.CreateControlPanelSliderSpec(AppStateKeys.SURFACE_COLORING, 1.0, 0.0, 1.0, 0.01),
                 UseViewLight: appState.CreateControlPanelCheckboxSpec(AppStateKeys.USE_VIEWLIGHT, true),
-                OutlineWidth: appState.CreateControlPanelSliderSpec(AppStateKeys.OUTLINE_WIDTH, 0.02, 0, 1, 0.005),
-                Levels: appState.CreateControlPanelSliderSpec(AppStateKeys.LEVELS, 2.0, 1.0, 10.0, .2)
+                OutlineWidth: appState.CreateControlPanelSliderSpec(AppStateKeys.OUTLINE_WIDTH, -0.5, -1, 0, 0.01),
+                Levels: appState.CreateControlPanelSliderSpec(AppStateKeys.LEVELS, 3.0, 1.0, 10.0, .5)
             }
         )
 
@@ -52,6 +67,8 @@ export class ToonShaderModel extends ABlinnPhongShaderModel {
     CreateMaterial(...args:any[]){
         let appState = GetAppState();
         let mat = super.CreateMaterial();
+        mat.attachUniformToAppState(AppStateKeys.AMBIENT, AppStateKeys.AMBIENT);
+        mat.attachUniformToAppState(AppStateKeys.DIFFUSE, AppStateKeys.DIFFUSE);
         mat.attachUniformToAppState(AppStateKeys.SURFACE_COLORING, AppStateKeys.SURFACE_COLORING);
         mat.attachUniformToAppState(AppStateKeys.USE_VIEWLIGHT, AppStateKeys.USE_VIEWLIGHT);
         mat.attachUniformToAppState(AppStateKeys.OUTLINE_WIDTH, AppStateKeys.OUTLINE_WIDTH);
