@@ -228,7 +228,7 @@ export abstract class ExampleSceneModel extends BaseSceneModel {
      * @returns {LoadedCharacterModel}
      * @constructor
      */
-    CreateCatModel(){
+    CreateCatModel(material?:AShaderMaterial){
         if(!this.get3DModel(ExampleSceneModel.CAT_MODEL_STRING_IDENTIFIER)){
             throw new Error("You need to load the cat assets using LoadTheCat() in PreloadAssets!")
         }
@@ -236,7 +236,7 @@ export abstract class ExampleSceneModel extends BaseSceneModel {
         /**
          * Let's start by creating an instance of our material
          */
-        let catMaterial = CharacterModel.CreateMaterial();
+        let catMaterial = material?? CharacterModel.CreateMaterial();
 
         /**
          * We will set the sampler2D called "xxxMap" using setTexture("xxx", aTextureInstance)
@@ -372,8 +372,8 @@ export abstract class ExampleSceneModel extends BaseSceneModel {
         this.addChild(this.player)
     }
 
-    initCatPlayer(){
-        this.player = this.CreateCatModel();
+    initCatPlayer(material?:AShaderMaterial){
+        this.player = this.CreateCatModel(material);
         this.addChild(this.player);
     }
 

@@ -1,5 +1,5 @@
 import { ExampleSceneController } from "../ExampleSceneController";
-import { Color, Mat3, V3 } from "../../../../anigraph";
+import {AGLContext, Color, Mat3, V3} from "../../../../anigraph";
 import { Example1SceneModel } from "./Example1SceneModel";
 import { DirectionalParticleSystemModel } from "../../Nodes/MyParticleSystem/DirectionalParticleSystemModel";
 import { DirectionalParticleSystemView } from "../../Nodes/MyParticleSystem/DirectionalParticleSystemView";
@@ -31,6 +31,10 @@ export class Example1SceneController extends ExampleSceneController {
         this.initExampleInteractions();
 
 
+    }
+
+    onAnimationFrameCallback(context:AGLContext) {
+        super.onAnimationFrameCallback(context);
     }
 
 }

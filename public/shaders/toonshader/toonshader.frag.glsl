@@ -35,7 +35,7 @@ varying vec4 vColor;
 #endif
 
 
-const float stepCount = 3.0; // Adjust this for more or fewer steps
+uniform float levels; // Adjust this for more or fewer steps
 
 #if ( NUM_POINT_LIGHTS > 0 )
 
@@ -59,7 +59,7 @@ vec3 evalDiffuse(vec3 position, vec3 N, int lightIndex){
 
 
     float diffuseStrength = dot(N,L);
-    diffuseStrength = floor(diffuseStrength * stepCount) / stepCount;
+    diffuseStrength = floor(diffuseStrength * levels) / levels;
     //    float diffuseStrength = 1.0;
 
     //    float dist = length(pToL);
@@ -81,7 +81,7 @@ vec3 evalSpecular(vec3 position, vec3 N, int lightIndex){
     vec3 lightReflect = normalize(reflect(-L, N));
     float specularFactor = max(dot(vertexToEye, lightReflect), 0.0);
 
-    specularFactor = floor(specularFactor*stepCount) / stepCount;
+    specularFactor = floor(specularFactor*levels) / levels;
     return lightColor*pow(specularFactor, specularExp);;
 }
 #endif

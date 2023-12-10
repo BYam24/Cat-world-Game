@@ -8,8 +8,13 @@ import {
     BillboardParticleSystemModel, SphereParticle,
 } from "../../Nodes";
 import { ExampleSceneModel } from "../ExampleSceneModel";
+import {ToonShaderModel} from "./ToonShaderModel";
 import { ABlinnPhongShaderModel } from "../../../../anigraph/rendering/shadermodels";
 import { DirectionalParticleSystemModel } from "../../Nodes/MyParticleSystem/DirectionalParticleSystemModel";
+
+enum SHADERS{
+    TOONSHADER="toonshader",
+}
 
 export class Example1SceneModel extends ExampleSceneModel {
     billboardParticles!: BillboardParticleSystemModel;
@@ -30,6 +35,7 @@ export class Example1SceneModel extends ExampleSceneModel {
          * ABlinnPhongShaderModel.attachMaterialUniformsToAppState(material);
          * ```
          */
+        ToonShaderModel.AddAppState();
         ABlinnPhongShaderModel.AddAppState();
         // BillboardParticleSystemModel.AddParticleSystemControls();
 
@@ -41,6 +47,9 @@ export class Example1SceneModel extends ExampleSceneModel {
         await this.LoadExampleTextures();
         await this.LoadExampleModelClassShaders()
         await this.LoadTheCat();
+
+        await GetAppState().addShaderMaterialModel(SHADERS.TOONSHADER, ToonShaderModel);
+        GetAppState().getShaderMaterialModel(SHADERS.TOONSHADER).usesVertexColors=true;
     }
 
 
@@ -58,6 +67,7 @@ export class Example1SceneModel extends ExampleSceneModel {
 
 
     initScene() {
+
         /**
          * We need to add a light before we can see anything.
          * The easiest thing is to just attach a point light to the camera.
@@ -75,9 +85,16 @@ export class Example1SceneModel extends ExampleSceneModel {
          */
         this.terrain.reRollRandomHeightMap();
 
+
+
+        let appState = GetAppState();
+
+        let material = appState.CreateShaderMaterial(SHADERS.TOONSHADER);
+        ABlinnPhongShaderModel.attachMaterialUniformsToAppState(material);
+
         // await this.addBotsInHierarchy();
 
-        this.initCatPlayer();
+        this.initCatPlayer(material);
 
         // this.addExampleThreeJSNodeModel();
 
