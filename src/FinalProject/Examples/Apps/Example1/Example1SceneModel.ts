@@ -21,6 +21,8 @@ export class Example1SceneModel extends ExampleSceneModel {
     directionalParticleSystem!: DirectionalParticleSystemModel;
     gravity: number = -2.62;
     camera_speed:number = 0.01;
+    previous_t:number = 0;
+    camera_look_at:Vec3 = V3(0,0,0);
 
     /**
      * Optionally add some app state here. Good place to set up custom control panel controls.
@@ -180,11 +182,31 @@ export class Example1SceneModel extends ExampleSceneModel {
         }
 
 
+        // this.cameraModel.setPose(
+        //     NodeTransform3D.LookAt(
+        //         // final_camera_pos,
+        //         this.player.position.plus(V3(-0.15,-1,1)),
+        //         this.player.position,
+        //         V3(0, 0, 1)
+        //     )
+        // )
+        let delta_t = t-this.previous_t;
+        this.previous_t =t;
+        let cur_camera_pos = this.camera.position;
+        let l_pos = 0.25
+        let target_camera_pos = this.player.position.plus(V3(0,-1,1));
+        let final_camera_pos = cur_camera_pos.plus(target_camera_pos.minus(cur_camera_pos).times(Math.min(1,delta_t/l_pos)))
+
+        let cur_look_at = this.camera_look_at
+        let target_look_at = this.player.position
+        let l_look_at = 0.25
+        this.camera_look_at = cur_look_at.plus(target_look_at.minus(cur_look_at).times(Math.min(1,delta_t/l_look_at)))
+
         this.cameraModel.setPose(
             NodeTransform3D.LookAt(
-                // final_camera_pos,
-                this.player.position.plus(V3(-0.15,-1,1)),
-                this.player.position,
+                final_camera_pos,
+                // this.player.position.plus(V3(-0.15,-1,1)),
+                this.camera_look_at,
                 V3(0, 0, 1)
             )
         )
