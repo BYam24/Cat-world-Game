@@ -7,7 +7,7 @@ import { FlameParticleSystemGraphic } from "./FlameParticleSystemGraphic";
 import { SphereParticle } from "./SphereParticle";
 
 export class FlameParticleSystemView extends AInstancedParticleSystemView<SphereParticle>{
-  static MAX_PARTICLES = 300;
+  static MAX_PARTICLES = 1000;
 
   get particlesElement(): FlameParticleSystemGraphic {
     return this._particlesElement as FlameParticleSystemGraphic;
