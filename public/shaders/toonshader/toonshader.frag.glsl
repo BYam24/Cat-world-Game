@@ -36,6 +36,8 @@ varying vec4 vColor;
 
 
 uniform float levels; // Adjust this for more or fewer steps
+uniform bool outline;
+uniform vec4 outlineColor;
 
 #if ( NUM_POINT_LIGHTS > 0 )
 
@@ -88,41 +90,39 @@ vec3 evalSpecular(vec3 position, vec3 N, int lightIndex){
 
 
 void main()	{
-    vec3 n = normalize(vNormal);
-    vec3 p = vPosition.xyz/vPosition.w;
-    vec4 surface_color = surfaceColoring*vColor+(1.0-surfaceColoring)*vec4(1.0,1.0,1.0,1.0);
-    if(diffuseMapProvided){
-        surface_color = surface_color*texture(diffuseMap, vUv);
-    }else{
-        surface_color;
+    if (outline){
+        gl_FragColor = outlineColor;
+    } else {
+        vec3 n = normalize(vNormal);
+        vec3 p = vPosition.xyz/vPosition.w;
+        vec4 surface_color = surfaceColoring*vColor+(1.0-surfaceColoring)*vec4(1.0,1.0,1.0,1.0);
+        if(diffuseMapProvided){
+            surface_color = surface_color*texture(diffuseMap, vUv);
+        }else{
+            surface_color;
+        }
+
+        vec3 specularLighting = vec3(0.0,0.0,0.0);
+        vec3 diffuseLighting = vec3(0.0,0.0,0.0);
+        vec3 lighting;
+
+        #if ( NUM_POINT_LIGHTS > 0 )
+        //    diffuseLighting = diffuseLighting+evalDiffuse(p,n,0);
+        int startLight = 1;
+        if(useViewLight){
+            startLight=0;
+        }
+        for (int lightIndex=startLight;lightIndex<int(NUM_POINT_LIGHTS);++lightIndex){
+            specularLighting = specularLighting+evalSpecular(p,n,lightIndex);
+            diffuseLighting = diffuseLighting+evalDiffuse(p,n,lightIndex);
+        }
+        lighting = diffuseLighting*surface_color.xyz*diffuse+specularLighting*specular + surface_color.xyz*vec3(ambient, ambient,ambient);
+        #else
+        // If all red that means you probably didn't add any point lights
+        lighting = vec3(1.0,0.0,0.0);
+        #endif
+
+
+        gl_FragColor = vec4(lighting,surface_color.w);
     }
-
-    vec3 specularLighting = vec3(0.0,0.0,0.0);
-    vec3 diffuseLighting = vec3(0.0,0.0,0.0);
-    vec3 lighting;
-
-    #if ( NUM_POINT_LIGHTS > 0 )
-    //    diffuseLighting = diffuseLighting+evalDiffuse(p,n,0);
-    int startLight = 1;
-    if(useViewLight){
-        startLight=0;
-    }
-    for (int lightIndex=startLight;lightIndex<int(NUM_POINT_LIGHTS);++lightIndex){
-        specularLighting = specularLighting+evalSpecular(p,n,lightIndex);
-        diffuseLighting = diffuseLighting+evalDiffuse(p,n,lightIndex);
-    }
-    lighting = diffuseLighting*surface_color.xyz*diffuse+specularLighting*specular + surface_color.xyz*vec3(ambient, ambient,ambient);
-    #else
-    // If all red that means you probably didn't add any point lights
-    lighting = vec3(1.0,0.0,0.0);
-    #endif
-
-
-    gl_FragColor = vec4(lighting,surface_color.w);
-    //    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-    //    gl_FragColor = vec4(n, 1.0);
-    //    gl_FragColor = vec4(surface_color.xyz, 1.0);
-
-    //    gl_FragColor = vec4(diffuse, diffuse, diffuse, 1.0);
-    //    gl_FragColor = vec4(specular, specular, specular, 1.0);
 }

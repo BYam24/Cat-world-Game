@@ -51,19 +51,28 @@ export class Example1SceneController extends ExampleSceneController {
          * ``` this.renderer.clear(false, true); ```
          */
         context.renderer.clear();
-        let ogColor = this.model.player.material.getModelColor();
+        context.renderer.autoClear = false;
 
-        // render the scene view
-        // this.model.player.material.setUniform3fv("cameraPos", this.cameraModel.pose.getPosition());
-        this.model.player.material.setRenderSide(AMaterial.GEOMETRY_SIDE.BACK);
-        this.model.player.material.setUniform("outline", true, "bool");
-        context.renderer.render(this.getThreeJSScene(), this.getThreeJSCamera());
+        if(this.model.cosmic_cat){
+            this.model.player.material.setRenderSide(AMaterial.GEOMETRY_SIDE.BOTH);
+            this.model.player.material.setUniform("outline", false, "bool");
+            context.renderer.render(this.getThreeJSScene(), this.getThreeJSCamera());
 
-        this.model.player.material.setRenderSide(AMaterial.GEOMETRY_SIDE.FRONT);
-        this.model.player.material.setUniform("outline", false, "bool");
+            this.model.player.material.setRenderSide(AMaterial.GEOMETRY_SIDE.BACK);
+            this.model.player.material.setUniform("outline", true, "bool");
+            context.renderer.render(this.getThreeJSScene(), this.getThreeJSCamera());
+        } else {
+            // render the scene view
+            this.model.player.material.setRenderSide(AMaterial.GEOMETRY_SIDE.BACK);
+            this.model.player.material.setUniform("outline", true, "bool");
+            context.renderer.render(this.getThreeJSScene(), this.getThreeJSCamera());
 
-        // this.model.player.material.setUniformColor("original", ogColor, 1.0);
-        context.renderer.render(this.getThreeJSScene(), this.getThreeJSCamera());
+            this.model.player.material.setRenderSide(AMaterial.GEOMETRY_SIDE.BOTH);
+            this.model.player.material.setUniform("outline", false, "bool");
+            context.renderer.render(this.getThreeJSScene(), this.getThreeJSCamera());
+        }
+
+
     }
 
 }

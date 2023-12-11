@@ -19,16 +19,14 @@ void main() {
     vColor = vec4(1.0,1.0,1.0,1.0);
     #endif
     vNormal = normalMatrix * normal;
-//
+
 //    vec4 worldPosition = modelMatrix * vec4(position, 1.0);
 //    float distance = length(cameraPos - worldPosition.xyz);
 //    float adjustedOutline = outlineWidth * distance;
 
-    // let's create a variable that represents the position modulated by a sin wave
 //    vec3 outlinePosition = position + (normalize(vNormal)* adjustedOutline);
     vec3 outlinePosition = position + (normalize(vNormal) * outlineWidth);
-    // We will pass a varying vec4 that represents position in the camera's frame of reference
-    // this will be interpolated during rasterization to give us a per-fragment value in our fragment shader
+
     vUv = vec2(uv.x,1.0-uv.y);
     if(outline){
         gl_Position = projectionMatrix * modelViewMatrix * vec4(outlinePosition, 1.0);

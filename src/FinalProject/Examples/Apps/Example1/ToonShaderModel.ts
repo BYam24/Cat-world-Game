@@ -14,8 +14,9 @@ enum AppStateKeys{
     AMBIENT = "ambient",
     DIFFUSE = "diffuse",
     SURFACE_COLORING = "surfaceColoring",
-    USE_VIEWLIGHT = "useViewLight",
     OUTLINE_WIDTH = "outlineWidth",
+    COSMIC_CAT = "cosmicCat",
+    OUTLINE_COLOR = "outlineColor",
     LEVELS = "levels"
 }
 
@@ -28,9 +29,9 @@ export class ToonShaderModel extends ABlinnPhongShaderModel {
             {
                 Ambient: appState.CreateControlPanelSliderSpec(AppStateKeys.AMBIENT, 1.0, 0.0, 2.0, 0.05),
                 Diffuse : appState.CreateControlPanelSliderSpec(AppStateKeys.DIFFUSE, .4, 0.0, 1.0, 0.001),
-                SurfaceColoring: appState.CreateControlPanelSliderSpec(AppStateKeys.SURFACE_COLORING, 1.0, 0.0, 1.0, 0.01),
-                UseViewLight: appState.CreateControlPanelCheckboxSpec(AppStateKeys.USE_VIEWLIGHT, true),
                 OutlineWidth: appState.CreateControlPanelSliderSpec(AppStateKeys.OUTLINE_WIDTH, -0.5, -1, 0, 0.01),
+                CosmicCat: appState.CreateControlPanelCheckboxSpec(AppStateKeys.COSMIC_CAT, false),
+                OutlineColor: appState.CreateControlPanelColorPickerSpec(AppStateKeys.OUTLINE_COLOR, Color.Blue()),
                 Levels: appState.CreateControlPanelSliderSpec(AppStateKeys.LEVELS, 3.0, 1.0, 10.0, .5)
             }
         )
@@ -70,14 +71,13 @@ export class ToonShaderModel extends ABlinnPhongShaderModel {
         mat.attachUniformToAppState(AppStateKeys.AMBIENT, AppStateKeys.AMBIENT);
         mat.attachUniformToAppState(AppStateKeys.DIFFUSE, AppStateKeys.DIFFUSE);
         mat.attachUniformToAppState(AppStateKeys.SURFACE_COLORING, AppStateKeys.SURFACE_COLORING);
-        mat.attachUniformToAppState(AppStateKeys.USE_VIEWLIGHT, AppStateKeys.USE_VIEWLIGHT);
         mat.attachUniformToAppState(AppStateKeys.OUTLINE_WIDTH, AppStateKeys.OUTLINE_WIDTH);
+        mat.attachUniformToAppState(AppStateKeys.OUTLINE_COLOR, AppStateKeys.OUTLINE_COLOR);
         mat.attachUniformToAppState(AppStateKeys.LEVELS, AppStateKeys.LEVELS);
 
         // Note that we could also remove one of the lines above and instead set the uniform on a per-instance basis.
         // Every node typically has its own material instance (the output of this function)
         // you can set individual uniformvalues like so:
-
         // generic
         // mat.setUniform("nameInShader", value)
 

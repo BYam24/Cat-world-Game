@@ -2,7 +2,7 @@ import {
     ACameraModel, AInteractionEvent, AMaterial,
     AppState, GetAppState,
     NodeTransform3D, Particle3D,
-    V3, Vec2, Vec3, AShaderModel, AShaderModelBase, AShaderMaterial
+    V3, Vec2, Vec3, AShaderModel, AShaderModelBase, AShaderMaterial, AVisiblePointLightModel, APointLightModel, Color
 } from "../../../../anigraph";
 import {
     BillboardParticleSystemModel, SphereParticle,
@@ -16,11 +16,16 @@ enum SHADERS{
     TOONSHADER="toonshader",
 }
 
+
 export class Example1SceneModel extends ExampleSceneModel {
+    lights:APointLightModel[]=[];
     billboardParticles!: BillboardParticleSystemModel;
     directionalParticleSystem!: DirectionalParticleSystemModel;
     gravity: number = -2.62;
     camera_speed:number = 0.01;
+    cosmic_cat = false;
+    MAIN_LIGHT_KEY = "Main Light Color";
+    NEW_LIGHT_KEY = "New Light Color";
 
     /**
      * Optionally add some app state here. Good place to set up custom control panel controls.
@@ -37,6 +42,8 @@ export class Example1SceneModel extends ExampleSceneModel {
          */
         ToonShaderModel.AddAppState();
         ABlinnPhongShaderModel.AddAppState();
+        appState.addColorControl(this.MAIN_LIGHT_KEY, Color.Green());
+        appState.addColorControl(this.NEW_LIGHT_KEY, Color.White());
         // BillboardParticleSystemModel.AddParticleSystemControls();
 
     }
@@ -73,6 +80,7 @@ export class Example1SceneModel extends ExampleSceneModel {
          * The easiest thing is to just attach a point light to the camera.
          */
         this.addViewLight();
+        this.addLight(Color.Green());
 
         /**
          * initialize terrain
@@ -130,7 +138,25 @@ export class Example1SceneModel extends ExampleSceneModel {
         if (particle.position.z < height) { particle.position.z = height; }
     }
 
-    startOutlineRendering(){
+    addLight(col : Color){
+        /**
+         * This creates a point light with a small sphere around it (so we can see where the point light is)
+         * @type {AVisiblePointLightModel}
+         */
+        let light = new AVisiblePointLightModel(
+            this.camera.transform.clone(),
+            col,1, 1, 1
+        );
+
+        this.lights.push(light);
+        this.addChild(light)
+    }
+
+    removeLastLight(col : Color){
+        let removed = this.lights.pop();
+        if (removed !== undefined){
+            this.removeChild(removed);
+        }
     }
 
     timeUpdate(t: number, ...args: any[]) {
@@ -199,6 +225,13 @@ export class Example1SceneModel extends ExampleSceneModel {
             this.adjustParticleHeight(e);
         }
         // this.timeUpdateOrbitBots(t);
+        let appState = GetAppState();
+        this.cosmic_cat = appState.getState("cosmicCat");
+
+        if (this.lights.length != 0){
+            this.lights[0].color = appState.getState(this.MAIN_LIGHT_KEY);
+        }
+
     }
 
 
