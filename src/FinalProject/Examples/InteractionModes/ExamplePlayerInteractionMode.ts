@@ -3,11 +3,12 @@ import {
     AInteractionEvent, AKeyboardInteraction, AParticle,
     ASerializable,
     NodeTransform3D, Particle3D, Vec2,
-    Vec3,
-    AWheelInteraction
+    Vec3, Color,
+    AWheelInteraction, GetAppState
 } from "../../../anigraph";
 import {ABasicSceneController, ASceneInteractionMode} from "../../../anigraph/starter";
 import type {HasInteractionModeCallbacks} from "../../../anigraph"
+import {Example1SceneModel} from "../Apps";
 
 
 interface HasPosition3D{
@@ -118,7 +119,17 @@ export class ExamplePlayerInteractionMode extends ASceneInteractionMode{
         if(interaction.keysDownState['q']){
             this.cameraTarget.fire = true;
         }
-        
+
+        if(event.key=='L' && event.shiftKey){
+            (this.owner.model as Example1SceneModel)
+             .addLight(GetAppState()
+                 .getState((this.owner.model as Example1SceneModel).NEW_LIGHT_KEY));
+        }
+
+        if(event.key=='R' && event.shiftKey){
+            (this.owner.model as Example1SceneModel)
+                .removeLastLight();
+        }
 
     }
 

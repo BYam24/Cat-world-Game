@@ -119,13 +119,6 @@ export class Example1SceneModel extends ExampleSceneModel {
         // this.flameParticleSystem = new FlameParticleSystemModel();
 
         // this.addChild(this.flameParticleSystem)
-
-
-
-
-
-
-
         /**
          * Here we attach our character's shader parameters to controls in the control panel
          */
@@ -161,10 +154,12 @@ export class Example1SceneModel extends ExampleSceneModel {
         this.addChild(light)
     }
 
-    removeLastLight(col : Color){
-        let removed = this.lights.pop();
-        if (removed !== undefined){
-            this.removeChild(removed);
+    removeLastLight(){
+        if(this.lights.length > 1){
+            let removed = this.lights.pop();
+            if (removed !== undefined){
+                this.removeChild(removed);
+            }
         }
     }
 
