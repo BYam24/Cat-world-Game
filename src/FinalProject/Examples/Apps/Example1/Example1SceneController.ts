@@ -1,8 +1,10 @@
 import { ExampleSceneController } from "../ExampleSceneController";
-import {AGLContext, AMaterial, Color, Mat3, V3} from "../../../../anigraph";
+import { AGLContext, AMaterial, Color, Mat3, V3 } from "../../../../anigraph";
 import { Example1SceneModel } from "./Example1SceneModel";
 import { DirectionalParticleSystemModel } from "../../Nodes/MyParticleSystem/DirectionalParticleSystemModel";
 import { DirectionalParticleSystemView } from "../../Nodes/MyParticleSystem/DirectionalParticleSystemView";
+import { FlameParticleSystemModel } from "../../Nodes/FlameParticleSystem/FlameParticleSystemModel";
+import { FlameParticleSystemView } from "../../Nodes/FlameParticleSystem/FlameParticleSystemView";
 
 
 
@@ -18,6 +20,7 @@ export class Example1SceneController extends ExampleSceneController {
         super.initModelViewSpecs();
         this.addExampleModelViewSpecs();
         this.addModelViewSpec(DirectionalParticleSystemModel, DirectionalParticleSystemView);
+        this.addModelViewSpec(FlameParticleSystemModel, FlameParticleSystemView)
     }
 
     async initScene(): Promise<void> {
@@ -28,10 +31,10 @@ export class Example1SceneController extends ExampleSceneController {
 
     initInteractions() {
         super.initInteractions();
-        this.initExampleInteractions();
+        super.initExampleInteractions();
     }
 
-    onAnimationFrameCallback(context:AGLContext) {
+    onAnimationFrameCallback(context: AGLContext) {
         /**
          * let's update the model...
          */

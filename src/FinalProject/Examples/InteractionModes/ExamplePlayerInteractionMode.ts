@@ -14,6 +14,7 @@ interface HasPosition3D{
     position:Vec3;
     dig: boolean
     dig_type: number
+    fire: boolean
 }
 
 @ASerializable("ExamplePlayerInteractionMode")
@@ -114,6 +115,11 @@ export class ExamplePlayerInteractionMode extends ASceneInteractionMode{
         if(interaction.keysDownState[' ']){
             this.cameraTarget.position.z = this.cameraTarget.position.z+this.keyboardMovementSpeed;
         }
+        if(interaction.keysDownState['q']){
+            this.cameraTarget.fire = true;
+        }
+        
+
     }
 
     onKeyUp(event:AInteractionEvent, interaction:AKeyboardInteraction){
