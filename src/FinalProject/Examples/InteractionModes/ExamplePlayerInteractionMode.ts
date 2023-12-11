@@ -86,16 +86,24 @@ export class ExamplePlayerInteractionMode extends ASceneInteractionMode{
 
     onKeyDown(event:AInteractionEvent, interaction:AKeyboardInteraction){
         if(interaction.keysDownState['w']){
+            if (this.cameraTarget.position.y< 4.5){
             this.cameraTarget.position.y = this.cameraTarget.position.y+this.keyboardMovementSpeed;
+            }
         }
         if(interaction.keysDownState['a']){
+            if (this.cameraTarget.position.x > -4.5){
             this.cameraTarget.position.x = this.cameraTarget.position.x-this.keyboardMovementSpeed;
+            }
         }
         if(interaction.keysDownState['s']){
+            if (this.cameraTarget.position.y > -4.5){
             this.cameraTarget.position.y = this.cameraTarget.position.y-this.keyboardMovementSpeed;
+            }
         }
         if(interaction.keysDownState['d']){
+            if (this.cameraTarget.position.x< 4.5){
             this.cameraTarget.position.x = this.cameraTarget.position.x+this.keyboardMovementSpeed;
+            }
         }
         if(interaction.keysDownState['f']){
             this.cameraTarget.dig = true;
