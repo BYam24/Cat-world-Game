@@ -29,10 +29,10 @@ export class ToonShaderModel extends ABlinnPhongShaderModel {
             {
                 Ambient: appState.CreateControlPanelSliderSpec(AppStateKeys.AMBIENT, 1.0, 0.0, 2.0, 0.05),
                 Diffuse : appState.CreateControlPanelSliderSpec(AppStateKeys.DIFFUSE, .4, 0.0, 1.0, 0.001),
+                Levels: appState.CreateControlPanelSliderSpec(AppStateKeys.LEVELS, 3.0, 1.0, 10.0, .5),
                 OutlineWidth: appState.CreateControlPanelSliderSpec(AppStateKeys.OUTLINE_WIDTH, -0.5, -1, 0, 0.01),
                 CosmicCat: appState.CreateControlPanelCheckboxSpec(AppStateKeys.COSMIC_CAT, false),
-                OutlineColor: appState.CreateControlPanelColorPickerSpec(AppStateKeys.OUTLINE_COLOR, Color.Blue()),
-                Levels: appState.CreateControlPanelSliderSpec(AppStateKeys.LEVELS, 3.0, 1.0, 10.0, .5)
+                OutlineColor: appState.CreateControlPanelColorPickerSpec(AppStateKeys.OUTLINE_COLOR, Color.Blue())
             }
         )
 
