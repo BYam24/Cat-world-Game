@@ -154,15 +154,32 @@ export class Example1SceneModel extends ExampleSceneModel {
         //decelerate
         // let gravity = -1.62
         // this.player.velocity = new Vec3(1000,1000,1000);
-        let gravity = Math.min(-5 * this.player.position.z/.4, -5) // larger gravity
+        let gravity = Math.min(-5 * this.player.position.z / .4, -5) // larger gravity
         let new_z = this.player.position.z + gravity * 0.0008
-        let directionalParticleSystem = new DirectionalParticleSystemModel()
-        let flameParticleSystem = new FlameParticleSystemModel()
+        let directionalParticleSystem = new DirectionalParticleSystemModel(this.camera)
 
-        if (this.player.position.z == this.terrain.getTerrainHeightAtPoint(this.player.position.xy) ){
+        let flameParticleSystem = new FlameParticleSystemModel(this.camera)
+
+
+
+        for (let c of this.getDescendantList()) {
+
+            if (c instanceof FlameParticleSystemModel) {
+                c.camera = this.camera
+            }
+
+            if (c instanceof DirectionalParticleSystemModel) {
+                c.camera = this.camera
+            }
+        }
+
+
+
+
+        if (this.player.position.z == this.terrain.getTerrainHeightAtPoint(this.player.position.xy)) {
             this.allowFlame = true
         }
-  
+
 
         if (new_z > this.terrain.getTerrainHeightAtPoint(this.player.position.xy)) {
 
@@ -193,8 +210,8 @@ export class Example1SceneModel extends ExampleSceneModel {
             this.player.dig = false
         }
 
-        if (this.player.fire){
-            let offset = new Vec3(0, -0.4 , 0)
+        if (this.player.fire) {
+            let offset = new Vec3(0, -0.4, 0)
             flameParticleSystem.curr_position = this.player.position.plus(offset)
             this.addChild(flameParticleSystem)
             this.player.fire = false

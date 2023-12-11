@@ -56,11 +56,16 @@ export class FlameParticleSystemView extends AInstancedParticleSystemView<Sphere
    * @param particle
    */
   _getTransformForParticleIndex(i: number): Mat4 {
-    // throw new Error("Method not implemented.");
     let particle = this.model.particles[i];
-    let nt = new NodeTransform3D(particle.position, new Quaternion(), particle.size);
-    return nt.getMat4();
+    let cameraPosition = this.model.camera.position;
 
+    let directionToCamera = cameraPosition.minus(particle.position).getNormalized();
+    let forwardVector = new Vec3(0, 0, 1);
+
+    let rotation = Quaternion.FromRotationBetweenTwoVectors(forwardVector, directionToCamera);
+
+    let nt = new NodeTransform3D(particle.position, rotation, particle.size);
+    return nt.getMat4();
   }
 
   update(args: any): void {

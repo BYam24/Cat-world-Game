@@ -1,5 +1,5 @@
 import { random } from "tinycolor2";
-import { ASerializable, Vec3, Color } from "../../../../anigraph";
+import { ASerializable, Vec3, Color, ACameraModel, ACamera } from "../../../../anigraph";
 import { AInstancedParticleSystemModel } from "../../../../anigraph/effects";
 import { SphereParticle } from "./SphereParticle";
 
@@ -12,10 +12,14 @@ export class DirectionalParticleSystemModel extends AInstancedParticleSystemMode
   timesRun: number = 0;
   curr_position = new Vec3(0, 0, 0)
 
-  constructor(nParticles: number = 100) {
+  camera!: ACamera
+
+  constructor(camera: ACamera, nParticles: number = 100) {
     super(nParticles);
+    this.camera = camera
     this.initParticles(nParticles);
     this.signalParticlesUpdated();
+
   }
 
   reset(position: Vec3) {

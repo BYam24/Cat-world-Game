@@ -1,5 +1,5 @@
 import { random } from "tinycolor2";
-import { ASerializable, Vec3, Color } from "../../../../anigraph";
+import { ASerializable, Vec3, Color, ACamera } from "../../../../anigraph";
 import { AInstancedParticleSystemModel } from "../../../../anigraph/effects";
 import { SphereParticle } from "./SphereParticle";
 
@@ -10,9 +10,12 @@ export class FlameParticleSystemModel extends AInstancedParticleSystemModel<Sphe
 
   lastEmittedIndex: number = 0;
   curr_position = new Vec3(0, 0, 0)
+  camera !: ACamera
 
-  constructor(nParticles: number = 2000) {
+  constructor(camera: ACamera, nParticles: number = 2000) {
+
     super(nParticles);
+    this.camera = camera
     this.initParticles(nParticles);
     this.signalParticlesUpdated();
   }
