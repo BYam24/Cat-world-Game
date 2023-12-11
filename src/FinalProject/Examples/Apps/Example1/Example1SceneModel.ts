@@ -27,7 +27,9 @@ export class Example1SceneModel extends ExampleSceneModel {
     camera_speed:number = 0.01;
     cosmic_cat = false;
     MAIN_LIGHT_KEY = "Main Light Color";
+    MAIN_LIGHT_INTENSITY = "Main Light Intensity";
     NEW_LIGHT_KEY = "New Light Color";
+    NEW_LIGHT_INTENSITY = "New Light Intensity";
     previous_t: number = 0;
     camera_look_at: Vec3 = V3(0, 0, 0);
     current_flame !: FlameParticleSystemModel;
@@ -50,7 +52,9 @@ export class Example1SceneModel extends ExampleSceneModel {
         ToonShaderModel.AddAppState();
         ABlinnPhongShaderModel.AddAppState();
         appState.addColorControl(this.MAIN_LIGHT_KEY, Color.White());
+        appState.addSliderControl(this.MAIN_LIGHT_INTENSITY, 0.4, 0, 1, .05);
         appState.addColorControl(this.NEW_LIGHT_KEY, Color.Blue());
+        appState.addSliderControl(this.NEW_LIGHT_INTENSITY, 0.4, 0, 1, .05);
         // BillboardParticleSystemModel.AddParticleSystemControls();
 
     }
@@ -87,7 +91,7 @@ export class Example1SceneModel extends ExampleSceneModel {
          * The easiest thing is to just attach a point light to the camera.
          */
         this.addViewLight();
-        this.addLight(Color.Green());
+        this.addLight(Color.White(), .4);
 
         /**
          * initialize terrain
@@ -140,14 +144,16 @@ export class Example1SceneModel extends ExampleSceneModel {
         if (particle.position.z < height) { particle.position.z = height; }
     }
 
-    addLight(col : Color){
+    addLight(col? : Color, inten? : number){
         /**
          * This creates a point light with a small sphere around it (so we can see where the point light is)
          * @type {AVisiblePointLightModel}
          */
+        col = col ?? GetAppState().getState(this.NEW_LIGHT_KEY);
+        inten = inten ?? GetAppState().getState(this.NEW_LIGHT_INTENSITY)
         let light = new AVisiblePointLightModel(
             this.camera.transform.clone(),
-            col,1, 1, 1
+            col,inten, 1, 1
         );
 
         this.lights.push(light);
@@ -299,6 +305,7 @@ export class Example1SceneModel extends ExampleSceneModel {
 
         if (this.lights.length != 0){
             this.lights[0].color = appState.getState(this.MAIN_LIGHT_KEY);
+            this.lights[0].intensity = appState.getState(this.MAIN_LIGHT_INTENSITY);
         }
 
     }

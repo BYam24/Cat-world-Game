@@ -122,8 +122,7 @@ export class ExamplePlayerInteractionMode extends ASceneInteractionMode{
 
         if(event.key=='L' && event.shiftKey){
             (this.owner.model as Example1SceneModel)
-             .addLight(GetAppState()
-                 .getState((this.owner.model as Example1SceneModel).NEW_LIGHT_KEY));
+             .addLight();
         }
 
         if(event.key=='R' && event.shiftKey){
