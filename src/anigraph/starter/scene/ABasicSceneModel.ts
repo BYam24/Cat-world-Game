@@ -59,7 +59,7 @@ export abstract class ABasicSceneModel extends ASceneModel{
 
 
     addViewLight(){
-        this.viewLight = new APointLightModel(this.camera.pose, Color.FromString("#ffffff"),1, 1, 1);
+        this.viewLight = new APointLightModel(this.camera.pose, Color.FromString("#ffffff"),.1, 1, 1);
         this.addChild(this.viewLight)
         this.attachViewLightToCamera();
     }

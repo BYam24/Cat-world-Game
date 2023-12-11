@@ -49,8 +49,8 @@ export class Example1SceneModel extends ExampleSceneModel {
          */
         ToonShaderModel.AddAppState();
         ABlinnPhongShaderModel.AddAppState();
-        appState.addColorControl(this.MAIN_LIGHT_KEY, Color.Green());
-        appState.addColorControl(this.NEW_LIGHT_KEY, Color.White());
+        appState.addColorControl(this.MAIN_LIGHT_KEY, Color.White());
+        appState.addColorControl(this.NEW_LIGHT_KEY, Color.Blue());
         // BillboardParticleSystemModel.AddParticleSystemControls();
 
     }
