@@ -25,7 +25,6 @@ export class Example1SceneModel extends ExampleSceneModel {
     camera_speed: number = 0.01;
     previous_t: number = 0;
     camera_look_at: Vec3 = V3(0, 0, 0);
-    allowFlame: boolean = true;
     current_flame !: FlameParticleSystemModel;
     remove_flame:boolean = false;
     
@@ -189,11 +188,6 @@ export class Example1SceneModel extends ExampleSceneModel {
         }
 
 
-        if (this.player.position.z == this.terrain.getTerrainHeightAtPoint(this.player.position.xy)) {
-            this.allowFlame = true
-        }
-
-
         if (new_z > this.terrain.getTerrainHeightAtPoint(this.player.position.xy)) {
             this.player.position.z = new_z
         }
@@ -204,6 +198,10 @@ export class Example1SceneModel extends ExampleSceneModel {
         if (this.player.dig && (this.player.position.z == this.terrain.getTerrainHeightAtPoint(this.player.position.xy))) {
             directionalParticleSystem.curr_position = this.player.position
 
+            if (this.remove_flame){
+                this.removeChild(this.current_flame)
+                this.remove_flame = false
+            }
             this.addChild(directionalParticleSystem)
             if (this.player.dig_type == 0) {
                 this.terrain.dig_hole(this.player.position.xy, 0.3, 0.5) // dig a hole right beneath the cat
@@ -224,8 +222,9 @@ export class Example1SceneModel extends ExampleSceneModel {
         if (this.player.fire) {
             if (this.remove_flame){
                 this.removeChild(this.current_flame)
+                this.remove_flame = false
             }
-            let offset = new Vec3(0, -0.4, 0)
+            let offset = new Vec3(0, -0.8, 0)
             flameParticleSystem.curr_position = this.player.position.plus(offset)
             this.addChild(flameParticleSystem)
             this.current_flame = flameParticleSystem
